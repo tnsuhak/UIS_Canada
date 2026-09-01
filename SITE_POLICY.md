@@ -6,5 +6,6 @@
 - Primary office phone: 02-3288-1733 (company listing 02-3288-1733~5); mobile: 010-5150-0105.
 - Email: tns@tnsuhak.com.
 - Company information and Seoul/Busan office addresses should appear on contact surfaces.
+- User-visible CTA wording should say **TNS유학** or **무료 상담**, not `한국센터 상담`.
 - School contact details may remain in structured data or factual source context when needed, but are not the primary conversion path.
 - Application documents and inquiry flow should be described as going through TNS consultation/support rather than sending users directly to UIS Korea or the school.
