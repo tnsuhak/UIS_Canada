@@ -9,3 +9,4 @@
 - User-visible CTA wording should say **TNS유학** or **무료 상담**, not `한국센터 상담`.
 - School contact details may remain in structured data or factual source context when needed, but are not the primary conversion path.
 - Application documents and inquiry flow should be described as going through TNS consultation/support rather than sending users directly to UIS Korea or the school.
+- Official UIS social/news source links may remain where needed for factual verification; they must not replace TNS as the consultation path.
