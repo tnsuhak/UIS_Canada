@@ -1,0 +1,82 @@
+name: Finish UIS Korean editorial voice cleanup
+
+on:
+  push:
+    branches:
+      - feature/remove-visa-finance-notice
+    paths:
+      - '.github/workflows/uis-korean-voice-final.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  edit:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/remove-visa-finance-notice
+          fetch-depth: 0
+      - name: Final Korean voice cleanup
+        shell: python
+        run: |
+          from pathlib import Path
+
+          replacements = {
+            'UIS Korea가 전달하는 Urban International School 월간 뉴스레터와 학교 소식을 한국 학생·학부모가 보기 쉽게 정리한 뉴스 아카이브입니다.':
+              'Urban International School(UIS)의 월간 뉴스레터와 학교생활·진학·학생지원 소식을 월별로 확인할 수 있는 한국어 뉴스 아카이브입니다.',
+            'UIS 숙소 옵션 중 Residence 형태로 안내되는 주거 선택지입니다. 현재 비용표에는 싱글룸 기준으로 안내되어 있습니다.':
+              'UIS Residence는 싱글룸 형태의 Residence 옵션입니다. 공용 욕실을 이용하며 4주 단위 비용이 적용됩니다.',
+            '현지 가정에서 생활하면서 학교의 숙소 관리 체계를 함께 이용하는 홈스테이 옵션입니다. 현재 비용표에는 싱글룸 기준으로 안내되어 있습니다.':
+              'Premium Homestay는 현지 가정에서 생활하는 싱글룸 홈스테이 옵션으로, 학교의 숙소 관리 체계와 함께 운영됩니다.',
+            '2027년 조정 금액은 2026년 12월 1일부터 적용되는 것으로 UIS 비용 안내에 반영되어 있습니다. 실제 계약 전에는 방 배정 가능 여부와 최신 인보이스를 확인해야 합니다.':
+              '2027년 조정 금액은 2026년 12월 1일부터 적용됩니다. 실제 계약 전에는 방 배정 가능 여부와 최신 인보이스를 확인해야 합니다.',
+            'UIS 사이트에 안내된 학생 지원 흐름을 숙소 관점에서 보면 다음과 같이 연결됩니다.':
+              '숙소 지원은 공항 도착부터 입주, 일상생활 확인과 후속 관리까지 다음 순서로 이어집니다.',
+            'UIS는 학교 홈스테이 거주 학생을 대상으로 숙소 담당팀이 방문해 생활 상태를 확인하고 Student Welfare QC Report를 통해 점검 결과를 학부모에게 공유하는 관리 체계를 안내하고 있습니다.':
+              '홈스테이 거주 학생은 숙소 담당팀이 생활 상태를 확인하고 Student Welfare QC Report를 통해 점검 결과를 학부모에게 공유합니다.',
+            '유학생 가정에서 가장 자주 부딪히는 여섯 가지 지점을 UIS가 어떻게 다루는지 정리했습니다.':
+              '유학생 가정에서 자주 마주치는 입학·생활·학부모 소통·진학 지원의 차이를 한눈에 비교할 수 있습니다.',
+            '2026년 졸업생들은 전 세계 대학에서 CAD $2.4M 이상의 장학금을 받았습니다. 대학 오퍼가 계속 발표되고 있었던 시점의 자료이므로 현재까지 확정된 수치와 사례만 표시합니다.':
+              '2026년 졸업생들은 전 세계 대학에서 CAD $2.4M 이상의 장학금을 받았습니다. 2026년 5월 초에도 대학 오퍼 발표가 계속되고 있었기 때문에 현재까지 확정된 수치와 사례만 표시합니다.',
+            '현재 비용표에는 싱글룸 기준으로 안내되어 있습니다.':
+              '싱글룸 기준으로 운영됩니다.',
+            '현재 UIS 한국어 사이트와 학교 안내 자료에 기재된':
+              '',
+            'UIS 한국센터가 안내한':
+              '',
+            'UIS 자료에 따르면':
+              '',
+            'UIS가 공개한':
+              '',
+            'UIS가 말하기를':
+              ''
+          }
+
+          changed=[]
+          targets=list(Path('.').rglob('*.html'))+[Path('netlify/edge-functions/main-enhancements.js')]
+          for p in targets:
+              if not p.exists():
+                  continue
+              text=p.read_text(encoding='utf-8')
+              old=text
+              for a,b in replacements.items():
+                  text=text.replace(a,b)
+              if text!=old:
+                  p.write_text(text,encoding='utf-8')
+                  changed.append(str(p))
+          print('changed:',*changed,sep='\n- ')
+      - name: Commit and remove temporary workflow
+        run: |
+          rm -f .github/workflows/uis-korean-voice-final.yml
+          git config user.name "tnsuhak"
+          git config user.email "tnsuhak@gmail.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Finalize direct UIS Korean guide voice"
+            git push origin HEAD:feature/remove-visa-finance-notice
+          fi
