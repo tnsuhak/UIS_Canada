@@ -28,6 +28,11 @@ export default async (request, context) => {
   );
 
   html = html.replace(
+    '<div class="card"><span class="card__key">Edsembli</span><h3>출결·성적 실시간 확인</h3><p>학생과 학부모가 출결, 성적, 교사 피드백을 직접 확인하며 개인 학업 플랜을 관리합니다.</p></div>',
+    '<div class="card"><span class="card__key">Edsembli</span><h3>출결·성적 실시간 확인</h3><p>한국에 있는 부모님도 직접 로그인해 학생의 성적과 출결, 학교에서 공유되는 학업·학교생활 기록과 교사 피드백을 수시로 확인할 수 있습니다.</p><a href="/edsembli-parent-portal.html" style="display:inline-block;margin-top:16px;color:#BE9134;font-weight:800;text-decoration:none">Edsembli 학부모 포털 자세히 보기 →</a></div>'
+  );
+
+  html = html.replace(
     '<h3 class="reveal" style="margin:clamp(38px,5vw,52px) 0 18px;font-size:21px">동아리와 학교 행사</h3>',
     '<div class="reveal" style="margin:clamp(38px,5vw,52px) 0 18px;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap"><h3 style="font-size:21px;margin:0">동아리와 학교 행사</h3><a href="/clubs.html" style="color:#9D2335;font-weight:800;text-decoration:none;font-size:14px">동아리 전체 보기 →</a></div>'
   );
