@@ -7,3 +7,4 @@
 - Email: tns@tnsuhak.com.
 - Company information and Seoul/Busan office addresses should appear on contact surfaces.
 - School contact details may remain in structured data or factual source context when needed, but are not the primary conversion path.
+- Application documents and inquiry flow should be described as going through TNS consultation/support rather than sending users directly to UIS Korea or the school.
