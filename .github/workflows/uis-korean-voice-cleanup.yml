@@ -1,0 +1,139 @@
+name: Polish UIS Korean guide voice
+
+on:
+  push:
+    branches:
+      - feature/remove-visa-finance-notice
+    paths:
+      - '.github/workflows/uis-korean-voice-cleanup.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  edit:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/remove-visa-finance-notice
+          fetch-depth: 0
+      - name: Apply direct Korean guide copy
+        shell: python
+        run: |
+          from pathlib import Path
+
+          replacements = {
+            'UIS KOREA</div><a class="back"': 'UIS 한국어 안내</div><a class="back"',
+
+            # News archive
+            'UIS Korea에서 전달한 공식 월간 뉴스레터를 바탕으로 한국 학생과 학부모에게 필요한 학교생활·진학·학생지원 소식을 월별로 정리했습니다.':
+              '학교생활, 진학, 학생지원 소식을 월별 뉴스레터로 확인할 수 있습니다. 최신 소식부터 지난 뉴스까지 한곳에 모았습니다.',
+
+            # Accommodation / parent / clubs detached-source wording
+            'UIS 한국센터가 안내한 Student Welfare QC Report를 기준으로, 학교가 홈스테이 생활을 확인할 때 보는 주요 항목을 정리했습니다.':
+              'Student Welfare QC Report에서는 홈스테이 학생의 생활 루틴, 적응 상태, 식사와 생활환경을 주요 항목으로 확인합니다.',
+            'UIS가 안내하는 네 가지 숙소 형태': '네 가지 숙소 형태',
+            '현재 UIS 한국어 사이트와 학교 안내 자료에 기재된 숙소 유형을 중심으로 정리했습니다. 실제 배정 가능 여부와 방 형태는 입학 시점의 공실 상황에 따라 확인해야 합니다.':
+              'Residence와 Homestay를 포함해 네 가지 숙소 형태를 선택할 수 있습니다. 실제 배정 가능 여부와 방 형태는 입학 시점의 공실 상황에 따라 달라질 수 있습니다.',
+            'UIS가 안내하는 Main Residence 형태의 숙소입니다. Drewry는 싱글룸과 더블룸, Charlton은 더블룸 기준으로 안내되어 있습니다.':
+              'Main Residence는 Drewry와 Charlton으로 나뉩니다. Drewry는 싱글룸과 더블룸, Charlton은 더블룸을 이용할 수 있습니다.',
+            '현재 UIS 학교 소개 자료와 한국어 사이트에 안내된 활동을 분야별로 정리했습니다. 실제 운영 동아리는 학기와 학생 수요에 따라 달라질 수 있습니다.':
+              '예술·미디어·언어, STEM, 스포츠 등 다양한 분야의 동아리와 학생 활동이 운영됩니다. 실제 운영 동아리는 학기와 학생 수요에 따라 달라질 수 있습니다.',
+            'UIS 한국센터가 안내한 관리 시스템을 기준으로, 학부모가 학생의 학업과 학교생활을 확인할 수 있는 주요 접점을 정리했습니다.':
+              '학부모는 Edsembli, 한국인 카운슬러, 정기 학부모–교사 상담과 주간 리포트를 통해 학생의 학업과 학교생활을 지속적으로 확인할 수 있습니다.',
+
+            # 2025 outcomes
+            '2025년 UIS 졸업생의 대학 합격 오퍼와 장학금 성과를 한 페이지에서 볼 수 있도록 정리했습니다. 2025년 졸업생의 대학 합격 오퍼와 장학금 성과를 한 페이지에서 확인할 수 있습니다.':
+              '2025년 졸업생은 총 255건의 대학 합격 오퍼를 받았으며, 장학금 총액은 CAD $3.25M을 기록했습니다. 주요 대학과 장학금 성과를 함께 확인할 수 있습니다.',
+            'UIS가 공개한 캐나다 상위 5개 대학 진학 비율': '캐나다 상위 5개 대학 진학 비율',
+            'UIS가 공개한 전 세계 학부 과정 합격률': '전 세계 대학 학부 과정 합격률',
+            '캐나다 대학 중심의 진학 결과에 더해 미국 대학 합격 오퍼도 크게 늘어난 것으로 공개됐습니다.':
+              '캐나다 대학 중심의 진학 결과에 더해 미국 대학 합격 오퍼도 2건에서 33건으로 크게 늘었습니다.',
+            '2025년 결과에는 University of Waterloo에서 CAD $120.5K 규모의 장학금 사례도 소개됐습니다.':
+              'University of Waterloo에서는 CAD $120.5K 규모의 장학금 사례도 나왔습니다.',
+            '2025년에는 University of Toronto 오퍼가 100건을 넘어섰고, Waterloo, McMaster, Queen\'s, York, Western, Ottawa, TMU, OCAD 등 다양한 대학의 합격 결과가 소개됐습니다.':
+              '2025년에는 University of Toronto 오퍼가 100건을 넘어섰고, Waterloo, McMaster, Queen\'s, York, Western, Ottawa, TMU, OCAD 등으로 진학 결과가 이어졌습니다.',
+            '오퍼 100건 이상 공개': '오퍼 100건 이상',
+
+            # 2026 outcomes
+            '2026년 졸업생의 대학 합격과 장학금 성과 중 현재까지 확인된 내용을 정리했습니다. 2026년 5월 초에도 대학 오퍼가 계속 발표되고 있었기 때문에, 확정된 수치와 사례만 표시합니다.':
+              '2026년 졸업생들은 전 세계 대학에서 CAD $2.4M 이상의 장학금을 받았습니다. 대학 오퍼가 계속 발표되고 있었던 시점의 자료이므로 현재까지 확정된 수치와 사례만 표시합니다.',
+            'UIS 4월 뉴스레터에 소개된 개별 장학금 사례': '개별 장학금 사례',
+            '기타 글로벌 대학 오퍼</strong><br>2026년 대학 오퍼 발표가 계속 이어진 것으로 안내':
+              '기타 글로벌 대학 오퍼</strong><br>2026년 대학 오퍼 발표 계속 진행',
+            '2026년에는 전체 오퍼 수의 최종 집계보다 장학금 성과가 먼저 구체적으로 공개됐습니다. 2026년 졸업생들은 전 세계 대학에서 총 CAD 2.4M 이상의 장학금을 받았습니다.':
+              '2026년 졸업생들은 전 세계 대학에서 총 CAD 2.4M 이상의 장학금을 받았으며, 개별 고액 장학금 사례도 이어졌습니다.',
+
+            # January news
+            'Talent Show, Fashion Show, Food Booth 등이 예고됐으며 학생들이 공연과 패션, 음식으로 서로의 문화를 나누는 행사로 소개됐습니다.':
+              'Talent Show, Fashion Show, Food Booth 등이 준비되며 학생들이 공연과 패션, 음식으로 서로의 문화를 나누게 됩니다.',
+            '학생들의 건강과 안전을 위해 MMR(홍역·볼거리·풍진) 예방접종 클리닉을 교내에서 운영하는 계획도 안내됐습니다.':
+              '학생들의 건강과 안전을 위해 MMR(홍역·볼거리·풍진) 예방접종 클리닉도 교내에서 운영합니다.',
+
+            # February news
+            'UIS Korea가 전달한 2026년 2월 뉴스레터의 대학 Early Offers, 신입생 적응, Festival과 학생 지원 소식을 정리했습니다.':
+              '2026년 2월에는 대학 Early Offers, 신입생 오리엔테이션, Festival과 다양한 학생 지원 활동이 이어졌습니다.',
+            '뉴스레터는 UIS 재학생의 영국 수의학 과정 조기 합격을 포함해 영국, 프랑스, 호주, 홍콩, 캐나다 여러 대학의 Early Offer 소식을 소개했습니다. 학생별 목표에 맞춘 학업 설계와 진학 지원을 함께 강조했습니다.':
+              '영국 수의학 과정 조기 합격을 포함해 영국, 프랑스, 호주, 홍콩, 캐나다 여러 대학의 Early Offer가 이어졌습니다. 학생별 목표에 맞춘 학업 설계와 진학 지원도 함께 진행됩니다.',
+            '언어뿐 아니라 문화·음식·전통을 함께 배우며 국제학생 간 교류를 넓히는 활동으로 소개됐습니다.':
+              '언어뿐 아니라 문화·음식·전통을 함께 배우며 국제학생 간 교류를 넓히는 활동입니다.',
+
+            # March news
+            '토론토대, 맥길대, UBC, 워털루대, 와세다대, 게이오대 등으로부터의 합격 소식이 소개됐습니다. 한국 국적 학생의 영국 Royal Veterinary College 수의학과 합격 사례와 학교의 인터뷰 준비 지원도 함께 다뤘습니다.':
+              '토론토대, 맥길대, UBC, 워털루대, 와세다대, 게이오대 등으로 합격 소식이 이어졌습니다. 한국 국적 학생은 영국 Royal Veterinary College 수의학과에 합격했고, 인터뷰 준비도 학교에서 지원했습니다.',
+            '대학 진학 영어 요건을 준비하는 학생들을 위해 UIS가 매달 무료 IELTS 모의고사를 운영하고 있다는 내용이 소개됐습니다.':
+              '대학 진학 영어 요건을 준비하는 학생들을 위해 매달 무료 IELTS 모의고사를 운영합니다.',
+
+            # April news
+            '뉴스레터는 2026 졸업생들이 전 세계 대학으로부터 총 CAD 2.4M 이상의 장학금을 받았다고 소개했습니다. University of Toronto Mathematics and Physical Sciences, Waseda, Keio, Western Ivey와 Medical Science 등 주요 합격 사례와 개별 CAD 40,000 장학금 사례도 포함됐습니다.':
+              '2026년 졸업생들은 전 세계 대학에서 총 CAD 2.4M 이상의 장학금을 받았습니다. University of Toronto Mathematics and Physical Sciences, Waseda, Keio, Western Ivey와 Medical Science 등 주요 합격 사례와 CAD 40,000 장학금 사례도 포함되어 있습니다.',
+            '캐나다에 처음 온 학생을 위해 은행 담당자가 학교를 방문해 계좌 개설을 지원한 내용도 소개됐습니다.':
+              '캐나다에 처음 온 학생을 위해 은행 담당자가 학교를 방문해 계좌 개설도 지원했습니다.',
+
+            # May news
+            'UIS 학생들이 University of Waterloo CEMC의 Fermat 및 Euclid 수학 경시대회에서 Distinction을 받았다는 성과가 소개됐습니다. 수학 지식뿐 아니라 문제 해결 능력을 다양한 문제에 적용하는 경험으로 강조됐습니다.':
+              'UIS 학생들이 University of Waterloo CEMC의 Fermat 및 Euclid 수학 경시대회에서 Distinction을 받았습니다. 수학 지식뿐 아니라 문제 해결 능력을 다양한 문제에 적용하는 경험입니다.',
+            '수업 밖에서 친구들과 교류하고 학교 공동체의 유대감을 높이는 학생 활동으로 소개됐습니다.':
+              '수업 밖에서 친구들과 교류하고 학교 공동체의 유대감을 높이는 학생 활동입니다.',
+
+            # June news
+            '뉴스레터는 학생 지원을 보다 체계적으로 운영하기 위해 새로운 교직원이 합류했다고 소개했습니다. 국제학생이 학교생활과 학업에 적응하는 과정에서 필요한 지원 체계를 강화하는 움직임으로 설명했습니다.':
+              '학생 지원을 보다 체계적으로 운영하기 위해 새로운 교직원이 합류했습니다. 국제학생의 학교생활과 학업 적응을 지원하는 체계를 계속 강화하고 있습니다.',
+            'UIS 뉴스레터는 TDSB의 행정·지원 인력 감축 관련 소식을 소개하며, 국제학생에게는 개별 지원 체계가 중요하다는 점을 강조했습니다. 이 내용은 UIS 뉴스레터가 학교의 국제학생 지원 모델과 비교해 설명한 시각을 요약한 것입니다.':
+              '6월에는 TDSB의 행정·지원 인력 감축 이슈와 함께 국제학생에게 개별 지원 체계가 왜 중요한지도 다뤘습니다. UIS는 학업과 생활을 함께 살피는 국제학생 지원 모델을 지속적으로 운영하고 있습니다.',
+            '서로 다른 국적의 학생들이 스포츠를 통해 자연스럽게 어울리는 학교 공동체 활동으로 소개됐습니다.':
+              '서로 다른 국적의 학생들이 스포츠를 통해 자연스럽게 어울리는 학교 공동체 활동입니다.',
+            '6월에는 교사와 학생이 함께하는 배구 경기가 열렸고, 뉴스레터는 2025년 9월부터 2026년 6월까지 University Fair, Winter Festival, February Festival, CEMC 성과, 졸업식, ICEF FAM Tour와 현장학습 등 한 학년의 주요 활동을 돌아봤습니다.':
+              '6월에는 교사와 학생이 함께하는 배구 경기가 열렸습니다. 2025년 9월부터 2026년 6월까지는 University Fair, Winter Festival, February Festival, CEMC 성과, 졸업식, ICEF FAM Tour와 현장학습 등 다양한 활동이 이어졌습니다.',
+
+            # July wording still carrying report-style phrases
+            '일반 영어 캠프와 달리 온타리오 교육과정을 바탕으로 영어의 읽기·쓰기·듣기·말하기뿐 아니라 수학·과학 등 교과에서 필요한 학술 어휘와 학습 방식에 익숙해지도록 설계된 과정으로 소개됐습니다.':
+              '일반 영어 캠프와 달리 온타리오 교육과정을 바탕으로 영어의 읽기·쓰기·듣기·말하기뿐 아니라 수학·과학 등 교과에서 필요한 학술 어휘와 학습 방식에 익숙해지도록 설계된 과정입니다.',
+            '긴 수업일을 시작하기 전 학생들이 식사를 챙기고 학업에 집중할 수 있도록 마련된 학생 지원 활동으로 소개됐습니다.':
+              '긴 수업일을 시작하기 전 학생들이 식사를 챙기고 학업에 집중할 수 있도록 마련된 학생 지원 활동입니다.'
+          }
+
+          changed = []
+          for p in Path('.').rglob('*.html'):
+              text = p.read_text(encoding='utf-8')
+              old = text
+              for a, b in replacements.items():
+                  text = text.replace(a, b)
+              if text != old:
+                  p.write_text(text, encoding='utf-8')
+                  changed.append(str(p))
+          print('changed:', *changed, sep='\n- ')
+      - name: Commit cleanup and remove temporary workflow
+        run: |
+          rm -f .github/workflows/uis-korean-voice-cleanup.yml
+          git config user.name "tnsuhak"
+          git config user.email "tnsuhak@gmail.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Polish UIS Korean guide voice"
+            git push origin HEAD:feature/remove-visa-finance-notice
+          fi
