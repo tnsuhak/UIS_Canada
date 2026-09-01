@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://uis-korea.netlify.app/sitemap.xml
