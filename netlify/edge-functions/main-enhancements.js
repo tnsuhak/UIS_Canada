@@ -6,7 +6,7 @@ export default async (request, context) => {
   let html = await response.text();
 
   const oldParentRow = '<tr><th>학부모 소통</th><td>Edsembli를 통한 <b>일상 기록 공유</b>, 8개 언어로 카운슬러와 직접 소통</td><td>간헐적인 영문 이메일 안내</td></tr><tr><th>대학 진학 지원</th>';
-  const newParentRow = '<tr><th>학부모 소통</th><td>Edsembli를 통한 <b>학생 성적/출결 공유</b>, 한국인 카운슬러와 직접 소통</td><td>간헐적인 영문 이메일 안내</td></tr><tr><th>학부모 미팅</th><td><b>Grade 7–10 연 2회(3월·11월)</b> 과목교사–학부모 상담<br><a href="/parent-communication.html" style="display:inline-block;margin-top:7px;color:#9D2335;font-weight:800;text-decoration:none">자세하게 보기 →</a></td><td>학교별 상담 일정·언어 지원 방식에 따라 운영</td></tr><tr><th>대학 진학 지원</th>';
+  const newParentRow = '<tr><th>학부모 소통</th><td>Edsembli를 통한 <b>학생 성적/출결 공유</b>, 한국인 카운슬러와 직접 소통</td><td>간헐적인 영문 이메일 안내</td></tr><tr><th>학부모 미팅</th><td><b>7~10 학년, 연 2회(3월·11월)</b> 교사–학부모 온라인 상담<br><a href="/parent-communication.html" style="display:inline-block;margin-top:7px;color:#9D2335;font-weight:800;text-decoration:none">자세하게 보기 →</a></td><td>학교별 상담 일정·언어 지원 방식에 따라 운영</td></tr><tr><th>대학 진학 지원</th>';
   html = html.replace(oldParentRow, newParentRow);
 
   const oldParentCard = '<div class="card"><span class="card__key">7–10학년 · 연 2회</span><h3>학부모–교사 상담 리포트</h3><p style="margin-bottom:16px">3월과 11월에 과목 담당 교사와 학부모가 직접 만납니다. 국가별 아카데믹 카운슬러가 통역으로 함께 참석하며, 상담 직후 6개 언어로 리포트가 제공됩니다.</p><ul class="checks"><li>학업 성취도와 수업 참여도</li><li>과목 교사 코멘트</li><li>교우 관계와 정서적 적응 상태</li><li>향후 학업 계획과 진로 방향</li></ul></div>';
@@ -19,7 +19,7 @@ export default async (request, context) => {
 
   html = html.replace(
     '<tr><th>동아리·활동</th><td>전공 계열과 연결된 동아리, NGO 봉사, 미디어·리더십·다문화 행사</td><td>활동 수가 적고 비교과 역량 관리가 어려움</td></tr>',
-    '<tr><th>동아리·활동</th><td>전공 계열과 연결된 동아리, NGO 봉사, 미디어·리더십·다문화 행사<br><a href="/clubs.html" style="display:inline-block;margin-top:7px;color:#9D2335;font-weight:800;text-decoration:none">동아리·학생 활동 보기 →</a></td><td>활동 수가 적고 비교과 역량 관리가 어려움</td></tr>'
+    '<tr><th>동아리·활동</th><td>전공 계열과 연결된 동아리, NGO 봉사, 미디어·리더십·다문화 행사<br><a href="/clubs.html" style="display:inline-block;margin-top:7px;color:#9D2335;font-weight:800;text-decoration:none">동아리 보기 →</a></td><td>활동 수가 적고 비교과 역량 관리가 어려움</td></tr>'
   );
 
   html = html.replace(
@@ -52,11 +52,22 @@ export default async (request, context) => {
     '<div class="card"><span class="card__key">2026년 졸업생</span><h3>장학금 240만 달러 이상</h3><p>토론토대학교 수리·물리과학, 일본 와세다대학교와 게이오대학교 국제교양학부, 웨스턴대학교 아이비 경영대와 의과학 프로그램 등에 합격했고, 4만 달러 장학금 사례도 포함되어 있습니다.</p><a href="/outcomes/2026-university-offers-scholarships.html" style="display:inline-block;margin-top:18px;color:#9D2335;font-weight:800;text-decoration:none">2026 대입·장학금 결과 자세히 보기 →</a></div>'
   );
 
+  html = html.replace(
+    '<h2>오퍼는 두 배로, 장학금은 계속 늘고 있습니다</h2>',
+    '<h2>대학 오퍼는 두 배, 장학금은 계속 늘고 있습니다</h2>'
+  );
+
+  html = html.replace(
+    '2025년 졸업생은 전년 대비 두 배 많은 합격 오퍼를 받았고',
+    '2025년 졸업생은 전년 대비 두 배 많은 대학 합격 오퍼를 받았고'
+  );
+
   const newNewsSection = `<section class="sec sec--tint" id="news"><div class="wrap"><div class="sec__hd reveal"><span class="tag">UIS 최신 소식</span><h2>최근 2개월 뉴스레터</h2><p class="lede">매월 발행되는 UIS 뉴스레터 중 가장 최근 2개월 소식을 빠르게 볼 수 있도록 정리했습니다. 이전 소식은 뉴스 아카이브에서 계속 확인할 수 있습니다.</p></div><div class="grid g2 reveal"><div class="card"><span class="card__key">2026년 8월</span><h3>Summer Immersion 현장학습과 BBQ Party</h3><p>여름 집중 프로그램 학생들이 나이아가라 폭포, 아가 칸 박물관, 로열 온타리오 박물관을 탐방했고, 연례 BBQ Party로 여름학기를 마무리했습니다. UIS는 이어서 9월 새 학기와 신입생 오리엔테이션을 준비했습니다.</p><a href="/news/2026-08-newsletter.html" style="display:inline-block;margin-top:18px;color:#9D2335;font-weight:800;text-decoration:none">8월 뉴스 자세히 보기 →</a></div><div class="card"><span class="card__key">2026년 7월</span><h3>여름학기·신입생 오리엔테이션·Breakfast Club</h3><p>Summer Immersion Program과 7월 신입생 오리엔테이션이 시작됐고, 여름학기 학생들을 위한 Breakfast Club, Horoscope 이벤트, 월드컵 응원 등 다양한 학교생활이 이어졌습니다.</p><a href="/news/2026-07-newsletter.html" style="display:inline-block;margin-top:18px;color:#9D2335;font-weight:800;text-decoration:none">7월 뉴스 자세히 보기 →</a></div></div><p class="reveal" style="margin:24px 0 0"><a class="btn btn--line" href="/news.html">UIS 전체 뉴스 보기 →</a></p></div></section>`;
 
   html = html.replace(
     /<section class="sec sec--tint" id="news">[\s\S]*?<\/section>\s*<section class="sec sec--dark">/,
-    `${newNewsSection}\n<section class="sec sec--dark">`
+    `${newNewsSection}
+<section class="sec sec--dark">`
   );
 
   const headers = new Headers(response.headers);
