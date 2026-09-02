@@ -11,6 +11,11 @@
 - Application documents and inquiry flow should be described as going through TNS consultation/support rather than sending users directly to UIS Korea or the school.
 - Official UIS social/news source links may remain where needed for factual verification; they must not replace TNS as the consultation path.
 
+## Homepage special-program presentation
+- The homepage `특별 프로그램` section should feature **B2 부티크 프로그램 only**.
+- Do not restore Pathway, Immersion, ESL/UHUB tabs to the homepage unless the user explicitly changes this policy.
+- The homepage B2 summary should link to `/b2-boutique-program.html` for the detailed programme explanation.
+- The detailed B2 page should keep current official schedule facts source-backed and should clearly label package pricing by the applicable year because B2 package fees may change.
 
 ## Korean editorial voice
 - 본문은 UIS 한국어 안내페이지에서 직접 설명하는 1인칭 기관형 문체를 사용한다.
