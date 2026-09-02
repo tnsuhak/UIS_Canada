@@ -17,6 +17,16 @@
 - The homepage B2 summary should link to `/b2-boutique-program.html` for the detailed programme explanation.
 - The detailed B2 page should keep current official schedule facts source-backed and should clearly label package pricing by the applicable year because B2 package fees may change.
 
+## B2 accommodation operating rule
+- For B2 students who need accommodation, the first recommended options are **Premium Homestay** or **UIS Regular Residence**.
+- These recommended B2 options allow a **single room**.
+- **UIS Regular Residence** is a homestay-type residence that accepts UIS students only.
+- **Main Residence is not the default B2 accommodation.** It is a 2-person room option that may be requested when the student/parent prefers it.
+- When Main Residence is requested, UIS can prioritize the allocation request, but actual move-in depends on vacancy and the student may need to wait.
+- On user-visible B2 pricing, translate `With Boarding` as **숙소 포함**, not `기숙 포함`, because the standard B2 accommodation is not necessarily Main Residence.
+- Do not invent separate B2 package prices by accommodation type unless UIS provides an explicit current price table.
+- Current 2026 B2 package figures remain CAD 63,000 with accommodation and CAD 51,000 without accommodation; later intakes must reconfirm current pricing.
+
 ## Korean editorial voice
 - 본문은 UIS 한국어 안내페이지에서 직접 설명하는 1인칭 기관형 문체를 사용한다.
 - `UIS가 공개한`, `UIS 자료에 따르면`, `UIS가 말하기를`, `뉴스레터를 바탕으로 정리했다`처럼 제3자가 UIS를 설명하는 출처 귀속 문장은 피한다.
