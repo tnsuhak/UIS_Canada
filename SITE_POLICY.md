@@ -27,6 +27,15 @@
 - Do not invent separate B2 package prices by accommodation type unless UIS provides an explicit current price table.
 - Current 2026 B2 package figures remain CAD 63,000 with accommodation and CAD 51,000 without accommodation; later intakes must reconfirm current pricing.
 
+## Homepage navigation / sitemap menu
+- The persistent homepage top navigation is for **same-page section jumps** only: 학교 소개, 진학 성과, 학사 과정, 특별 프로그램, 학생 관리, 학비·숙소, 입학 절차.
+- Do not place the primary consultation CTA in the top navigation; consultation remains in the body and bottom/floating CTA surfaces.
+- The right-side `전체 메뉴` is a **site-map style hierarchy**, not an unrelated re-categorization of pages.
+- Sitemap groups should mirror the homepage topics. Each group heading links back to the matching homepage section, and directly related detail pages are listed underneath.
+- Current mappings: 학교 소개 → 학생 이야기/동아리·학생 활동; 진학 성과 → 2025/2026 결과; 특별 프로그램 → B2; 학생 관리 → 학부모 소통/Edsembli/숙소 QC; 학비·숙소 → 숙소 상세; 최신 소식 → 뉴스 아카이브/월별 뉴스.
+- 학사 과정 and 입학 절차 currently have no dedicated detail page, so keep only the homepage section link rather than inventing a weakly related subpage.
+- As new detail pages are added, place them under the homepage topic they extend so the relationship remains obvious to users.
+
 ## Korean editorial voice
 - 본문은 UIS 한국어 안내페이지에서 직접 설명하는 1인칭 기관형 문체를 사용한다.
 - `UIS가 공개한`, `UIS 자료에 따르면`, `UIS가 말하기를`, `뉴스레터를 바탕으로 정리했다`처럼 제3자가 UIS를 설명하는 출처 귀속 문장은 피한다.
