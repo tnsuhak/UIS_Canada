@@ -42,10 +42,17 @@
 - The featured video must play **inline on the UIS page** via an embedded YouTube player rather than sending the user to YouTube.
 - The homepage should link to `/videos.html` for the broader video library instead of displaying many video cards on the homepage.
 - `/videos.html` should retain the UIS videos previously shown on the homepage and present them as inline embedded players, including school introduction, campus tour, directions, student care, parent interview, parent-teacher conference, middle school, Summer Immersion, and orientation videos.
+- `/edsembli-parent-portal.html` should embed the Edsembli video `eLHE7Np1Wks` inline on the page.
 - Use `youtube-nocookie.com` embed URLs and `loading="lazy"` for non-featured videos to reduce unnecessary loading while preserving inline playback.
+
+## User-visible source policy
+- General UIS guide/detail pages should **not display `자료 출처`, `출처:` or source-link boxes by default**.
+- Facts should still be verified against official/current materials during editing, but source references are kept in the working context/repository rather than automatically shown to users.
+- Add a visible source only when the user explicitly asks for it or when a page-specific policy requires it.
+- **News articles are the exception:** keep the official original/source link on news content as required by the project news policy.
 
 ## Korean editorial voice
 - 본문은 UIS 한국어 안내페이지에서 직접 설명하는 1인칭 기관형 문체를 사용한다.
 - `UIS가 공개한`, `UIS 자료에 따르면`, `UIS가 말하기를`, `뉴스레터를 바탕으로 정리했다`처럼 제3자가 UIS를 설명하는 출처 귀속 문장은 피한다.
-- 사실은 본문에서 바로 말하고, 검증 출처는 페이지 하단의 작은 `자료 출처` 영역에서만 표시한다.
+- 사실은 본문에서 바로 설명하고, 일반 안내 페이지에는 출처 박스를 기본 노출하지 않는다. 뉴스 기사만 원문 출처를 유지한다.
 - 실제 학교 소유 공식 도메인으로 오해할 수 있는 `UIS 공식 한국 홈페이지` 표기는 사용하지 않고 `UIS 한국어 안내`를 사용한다.
