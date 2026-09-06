@@ -32,7 +32,7 @@
 - Do not place the primary consultation CTA in the top navigation; consultation remains in the body and bottom/floating CTA surfaces.
 - The right-side `전체 메뉴` is a **site-map style hierarchy**, not an unrelated re-categorization of pages.
 - Sitemap groups should mirror the homepage topics. Each group heading links back to the matching homepage section, and directly related detail pages are listed underneath.
-- Current mappings: 학교 소개 → 학생 이야기/동아리·학생 활동/UIS 학교 영상 모음/UIS 학생 후기 영상 모음; 진학 성과 → 2025/2026 결과; 특별 프로그램 → B2; 학생 관리 → 학부모 소통/Edsembli/숙소 QC; 학비·숙소 → 숙소 상세; 최신 소식 → 뉴스 아카이브.
+- Current mappings: 학교 소개 → 학생 이야기/동아리·학생 활동/UIS 학교 영상 모음/UIS 학생 후기 영상 모음; 진학 성과 → 2025/2026 결과; 특별 프로그램 → B2; 학생 관리 → 학부모 소통/Edsembli/숙소 QC; 학비·숙소 → 2027 학비/숙소 상세; 최신 소식 → 뉴스 아카이브.
 - Monthly news article links belong inside the news archive and should not be individually expanded in the global sitemap menu.
 - 학사 과정 and 입학 절차 currently have no dedicated detail page, so keep only the homepage section link rather than inventing a weakly related subpage.
 - As new detail pages are added, place them under the homepage topic they extend so the relationship remains obvious to users.
@@ -43,6 +43,16 @@
 - Label the main tuition tab simply **`2027년`**, not `2027년 (12/1부터)`.
 - Keep a separate `숙소비` tab, but show the 2027 accommodation rates only rather than a 2026-vs-2027 comparison.
 - Older fee schedules may remain in repository history/source material for internal reference, but should not occupy homepage space.
+- The homepage fee section should link to `/tuition.html` for the detailed 2027 tuition guide and `/accommodation.html` for accommodation details.
+
+## 2027 tuition detail page
+- `/tuition.html` is the dedicated **2027 tuition and expected-payment guide**.
+- Use the current 2027 tuition schedule: Grade 7–8 CAD 20,000 per grade / CAD 10,000 per semester; Grade 9–12 CAD 2,800 per credit, with 8 credits CAD 22,400, 9 credits CAD 25,200 and 10 credits CAD 28,000.
+- Keep additional confirmed fees visible in clear tables: school fee, uniform, registration, custodianship/guardianship where applicable, airport pickup and international-student insurance.
+- The page may use an **invoice-style HTML table** to help users understand a realistic payment breakdown, but it must be clearly labelled as an example rather than an official issued invoice.
+- Current example model: Grade 9, 8 credits, Regular (UIS) Residence / UIS Residence 12 weeks, Custodianship 1 year. Confirmed 2027 example total is CAD 33,400 before any unconfirmed bank/transaction fee.
+- Do not carry forward old sample-invoice fees into the 2027 total unless they are reconfirmed in current materials. For example, an old CAD 20 Bank Fee should remain excluded until reconfirmed.
+- Keep `/tuition.html` indexable with canonical metadata, sitemap inclusion and internal links to accommodation, admission and TNS consultation.
 
 ## Video presentation
 - The homepage `영상으로 보기` section should feature the **TNS UIS on-site visit video** (`_TQOHyJ9E4o`) as the single primary embedded video.
