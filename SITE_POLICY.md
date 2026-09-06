@@ -50,8 +50,10 @@
 - The homepage school-video CTA wording is **`UIS 학교 영상 모음`** and links to `/videos.html`.
 - `/videos.html` should retain the broader UIS video library and present videos as inline embedded players, including school introduction, campus tour, directions, student care, parent interview, parent-teacher conference, middle school, Summer Immersion, and orientation videos.
 - The homepage `학생 이야기` section should feature a **Korean-student testimonial video** as the single primary inline video instead of long testimonial-card grids.
-- The current primary student testimonial is Songhyun Back's University of Toronto scholarship story (`BNChwQMLOxg`).
 - The student-story CTA wording is **`UIS 학생 후기 영상 모음`** and links to `/student-videos.html`.
+- `/student-videos.html` must always place the **해대쉽 video first**. Current top video: `uOiiWw4qEIk`.
+- The next priority testimonial video is `YAEim0A_xo8`, placed immediately after the Haedaeship video.
+- Existing Songhyun Back (`BNChwQMLOxg`) and other verified Korean/Korean-language testimonial videos follow after those priority videos.
 - `/student-videos.html` prioritizes verified Korean-student / Korean-language UIS testimonial videos. Do not label a video as Korean-student content unless that is verified; related general international-student videos may be placed in a separate supporting section.
 - `/edsembli-parent-portal.html` should embed the Edsembli video `eLHE7Np1Wks` inline on the page.
 - Use `youtube-nocookie.com` embed URLs and `loading="lazy"` for non-featured videos to reduce unnecessary loading while preserving inline playback.
