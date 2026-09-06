@@ -27,15 +27,24 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          base64 --decode assets/qc/lunch-a.txt > assets/qc-lunch-report-20260906.webp
-          base64 --decode assets/qc/homestay-a.txt > assets/qc-homestay-report-20260906.webp
+          node <<'NODE'
+          const fs = require('fs');
+          const jobs = [
+            ['assets/qc/lunch-a.txt', 'assets/qc-lunch-report-20260906.webp'],
+            ['assets/qc/homestay-a.txt', 'assets/qc-homestay-report-20260906.webp']
+          ];
+          for (const [src, out] of jobs) {
+            const text = fs.readFileSync(src, 'utf8').replace(/[^A-Za-z0-9+/=]/g, '');
+            const data = Buffer.from(text, 'base64');
+            if (data.subarray(0, 4).toString('ascii') !== 'RIFF' || data.subarray(8, 12).toString('ascii') !== 'WEBP') {
+              throw new Error(`${src} did not decode to a WebP file`);
+            }
+            fs.writeFileSync(out, data);
+            console.log(`${out}: ${data.length} bytes`);
+          }
+          NODE
           file assets/qc-lunch-report-20260906.webp
           file assets/qc-homestay-report-20260906.webp
-          test "$(head -c 4 assets/qc-lunch-report-20260906.webp)" = "RIFF"
-          test "$(dd if=assets/qc-lunch-report-20260906.webp bs=1 skip=8 count=4 status=none)" = "WEBP"
-          test "$(head -c 4 assets/qc-homestay-report-20260906.webp)" = "RIFF"
-          test "$(dd if=assets/qc-homestay-report-20260906.webp bs=1 skip=8 count=4 status=none)" = "WEBP"
-          wc -c assets/qc-lunch-report-20260906.webp assets/qc-homestay-report-20260906.webp
 
       - name: Commit real binary image files
         shell: bash
