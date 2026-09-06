@@ -10,7 +10,7 @@ export default async (request, context) => {
   @media(max-width:720px){#care .card a[href^="/"]{font-size:13px!important}}
   </style>`;
 
-  const script = `<script id="uis-care-link-tweaks-script">(function(){function apply(){var care=document.getElementById('care');if(!care)return;care.querySelectorAll('a').forEach(function(a){var text=(a.textContent||'').trim();if(text.indexOf('학부모 소통·온라인 상담 자세하게 보기')!==-1){a.textContent='자세하게 보기 →';}if(text.indexOf('숙소 유형 안내')!==-1){a.remove();}});}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',apply);}else{apply();}})();</script>`;
+  const script = `<script id="uis-care-link-tweaks-script">(function(){function apply(){var care=document.getElementById('care');if(!care)return;care.querySelectorAll('a').forEach(function(a){var text=(a.textContent||'').trim();var href=a.getAttribute('href')||'';if(text.indexOf('숙소 유형 안내')!==-1){a.remove();return;}if(a.closest('.card')&&(href==='/parent-communication.html'||href==='/accommodation-qc.html'||href==='/edsembli-parent-portal.html')){a.textContent='자세하게 보기 →';}});}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',apply);}else{apply();}})();</script>`;
 
   if (!html.includes('id="uis-care-link-tweaks-style"')) {
     html = html.replace('</head>', `${style}</head>`);
