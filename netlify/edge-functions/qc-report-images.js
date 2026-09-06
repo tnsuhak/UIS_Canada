@@ -8,8 +8,8 @@ export default async (request, context) => {
   const loader = `<script id="uis-qc-report-image-loader">
 (function(){
   const reports = [
-    {match:'uis-qc-lunch-inspection-anonymized.webp', data:'/assets/qc/lunch-q8.txt'},
-    {match:'uis-qc-homestay-inspection-anonymized.webp', data:'/assets/qc/homestay-q8.txt'}
+    {match:'uis-qc-lunch-inspection-anonymized.webp', data:'/assets/qc/lunch-a.txt', mime:'image/webp'},
+    {match:'uis-qc-homestay-inspection-anonymized.webp', data:'/assets/qc/homestay-a.txt', mime:'image/webp'}
   ];
   async function loadReport(item){
     const img = Array.from(document.querySelectorAll('.report-frame img')).find(el => (el.getAttribute('src') || '').includes(item.match));
@@ -19,7 +19,7 @@ export default async (request, context) => {
       if(!res.ok) throw new Error('image data '+res.status);
       const b64 = (await res.text()).replace(/\\s+/g,'');
       if(!b64 || b64.length < 1000) throw new Error('image data incomplete');
-      const dataUrl = 'data:image/avif;base64,' + b64;
+      const dataUrl = 'data:' + item.mime + ';base64,' + b64;
       img.src = dataUrl;
       img.removeAttribute('loading');
       const link = img.closest('a');
