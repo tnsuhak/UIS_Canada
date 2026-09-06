@@ -32,9 +32,17 @@
 - Do not place the primary consultation CTA in the top navigation; consultation remains in the body and bottom/floating CTA surfaces.
 - The right-side `전체 메뉴` is a **site-map style hierarchy**, not an unrelated re-categorization of pages.
 - Sitemap groups should mirror the homepage topics. Each group heading links back to the matching homepage section, and directly related detail pages are listed underneath.
-- Current mappings: 학교 소개 → 학생 이야기/동아리·학생 활동; 진학 성과 → 2025/2026 결과; 특별 프로그램 → B2; 학생 관리 → 학부모 소통/Edsembli/숙소 QC; 학비·숙소 → 숙소 상세; 최신 소식 → 뉴스 아카이브/월별 뉴스.
+- Current mappings: 학교 소개 → 학생 이야기/동아리·학생 활동/UIS 영상 모아보기; 진학 성과 → 2025/2026 결과; 특별 프로그램 → B2; 학생 관리 → 학부모 소통/Edsembli/숙소 QC; 학비·숙소 → 숙소 상세; 최신 소식 → 뉴스 아카이브.
+- Monthly news article links belong inside the news archive and should not be individually expanded in the global sitemap menu.
 - 학사 과정 and 입학 절차 currently have no dedicated detail page, so keep only the homepage section link rather than inventing a weakly related subpage.
 - As new detail pages are added, place them under the homepage topic they extend so the relationship remains obvious to users.
+
+## Video presentation
+- The homepage `영상으로 보기` section should feature the **TNS UIS on-site visit video** (`_TQOHyJ9E4o`) as the single primary embedded video.
+- The featured video must play **inline on the UIS page** via an embedded YouTube player rather than sending the user to YouTube.
+- The homepage should link to `/videos.html` for the broader video library instead of displaying many video cards on the homepage.
+- `/videos.html` should retain the UIS videos previously shown on the homepage and present them as inline embedded players, including school introduction, campus tour, directions, student care, parent interview, parent-teacher conference, middle school, Summer Immersion, and orientation videos.
+- Use `youtube-nocookie.com` embed URLs and `loading="lazy"` for non-featured videos to reduce unnecessary loading while preserving inline playback.
 
 ## Korean editorial voice
 - 본문은 UIS 한국어 안내페이지에서 직접 설명하는 1인칭 기관형 문체를 사용한다.
