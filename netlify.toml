@@ -1,0 +1,3 @@
+[build]
+  command = "node scripts/build-qc-images.mjs"
+  publish = "."
