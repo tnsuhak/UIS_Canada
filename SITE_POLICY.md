@@ -48,15 +48,15 @@
 - The homepage `영상으로 보기` section should feature the **TNS UIS on-site visit video** (`_TQOHyJ9E4o`) as the single primary embedded video.
 - The featured school video must play **inline on the UIS page** via an embedded YouTube player rather than sending the user to YouTube.
 - The homepage school-video CTA wording is **`UIS 학교 영상 모음`** and links to `/videos.html`.
-- `/videos.html` should retain the broader UIS video library and present videos as inline embedded players, including school introduction, campus tour, directions, student care, parent interview, parent-teacher conference, middle school, Summer Immersion, and orientation videos.
+- `/videos.html` is the broad UIS video library. School/campus, residence and accommodation, general student life, middle school, programmes, student care, parent communication, graduation/Prom and similar non-interview videos belong here.
+- Avoid duplicate embeds within `/videos.html`; if a video already exists in the appropriate section, keep the existing card rather than adding another copy.
 - The homepage `학생 이야기` section should feature a **Korean-student testimonial video** as the single primary inline video instead of long testimonial-card grids.
 - The student-story CTA wording is **`UIS 학생 후기 영상 모음`** and links to `/student-videos.html`.
+- `/student-videos.html` is intentionally narrow: include only **university admission/scholarship outcome stories** or **direct 1:1 student interview/testimonial videos**. Residence-only, general school-life, programme, event and other informational videos belong on `/videos.html` instead.
 - `/student-videos.html` must always place the **해대쉽 video first**. Current top video: `uOiiWw4qEIk`.
-- The next priority testimonial video is `YAEim0A_xo8`, placed immediately after the Haedaeship video.
-- Existing Songhyun Back (`BNChwQMLOxg`) and other verified Korean/Korean-language testimonial videos follow after those priority videos.
-- `/student-videos.html` should stay compact: no repeated section headings or introductory paragraphs between groups of videos. Each video card may keep a **short Korean title plus 1–2 lines of useful context** such as who the student is, notable university admission/scholarship results, or what aspect of school/residence life the video covers.
+- Current student-testimonial order to preserve unless the user changes it: `uOiiWw4qEIk` → `YAEim0A_xo8` → `5pfXyfCMVP4` → `XxVtMjgRL6M` → `BNChwQMLOxg`.
+- `/student-videos.html` should stay compact: no repeated section headings or introductory paragraphs between groups of videos. Each video card may keep a **short Korean title plus 1–2 lines of useful context** such as who the student is or notable university admission/scholarship results.
 - Translate user-visible English video titles into natural Korean. Keep official acronyms such as RVC only when useful, with the Korean institution name alongside them.
-- `/student-videos.html` prioritizes verified Korean-student / Korean-language UIS testimonial videos. Do not label a video as Korean-student content unless that is verified; related general international-student videos may be placed in a separate supporting section.
 - `/edsembli-parent-portal.html` should embed the Edsembli video `eLHE7Np1Wks` inline on the page.
 - Use `youtube-nocookie.com` embed URLs and `loading="lazy"` for non-featured videos to reduce unnecessary loading while preserving inline playback.
 
