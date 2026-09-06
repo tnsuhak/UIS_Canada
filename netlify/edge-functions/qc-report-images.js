@@ -8,8 +8,8 @@ export default async (request, context) => {
   const loader = `<script id="uis-qc-report-image-loader">
 (function(){
   const reports = [
-    {match:'uis-qc-lunch-inspection-anonymized.webp', data:'/assets/qc/lunch-a.txt'},
-    {match:'uis-qc-homestay-inspection-anonymized.webp', data:'/assets/qc/homestay-a.txt'}
+    {match:'uis-qc-lunch-inspection-anonymized.webp', data:'/assets/qc/lunch-q8.txt'},
+    {match:'uis-qc-homestay-inspection-anonymized.webp', data:'/assets/qc/homestay-q8.txt'}
   ];
   async function loadReport(item){
     const img = Array.from(document.querySelectorAll('.report-frame img')).find(el => (el.getAttribute('src') || '').includes(item.match));
