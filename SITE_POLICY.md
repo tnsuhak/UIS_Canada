@@ -37,6 +37,13 @@
 - 학사 과정 and 입학 절차 currently have no dedicated detail page, so keep only the homepage section link rather than inventing a weakly related subpage.
 - As new detail pages are added, place them under the homepage topic they extend so the relationship remains obvious to users.
 
+## Homepage fee presentation
+- The homepage `학비·숙소` section should show the **2027 fee schedule only** while 2027 is the target intake year.
+- Do not restore a separate `2026년(현행)` tab or the `국가별 비교` tab unless the user explicitly requests them again.
+- Label the main tuition tab simply **`2027년`**, not `2027년 (12/1부터)`.
+- Keep a separate `숙소비` tab, but show the 2027 accommodation rates only rather than a 2026-vs-2027 comparison.
+- Older fee schedules may remain in repository history/source material for internal reference, but should not occupy homepage space.
+
 ## Video presentation
 - The homepage `영상으로 보기` section should feature the **TNS UIS on-site visit video** (`_TQOHyJ9E4o`) as the single primary embedded video.
 - The featured video must play **inline on the UIS page** via an embedded YouTube player rather than sending the user to YouTube.
