@@ -54,6 +54,8 @@
 - `/student-videos.html` must always place the **해대쉽 video first**. Current top video: `uOiiWw4qEIk`.
 - The next priority testimonial video is `YAEim0A_xo8`, placed immediately after the Haedaeship video.
 - Existing Songhyun Back (`BNChwQMLOxg`) and other verified Korean/Korean-language testimonial videos follow after those priority videos.
+- `/student-videos.html` should stay compact: no repeated section headings or introductory paragraphs between groups of videos. Each video card may keep a **short Korean title plus 1–2 lines of useful context** such as who the student is, notable university admission/scholarship results, or what aspect of school/residence life the video covers.
+- Translate user-visible English video titles into natural Korean. Keep official acronyms such as RVC only when useful, with the Korean institution name alongside them.
 - `/student-videos.html` prioritizes verified Korean-student / Korean-language UIS testimonial videos. Do not label a video as Korean-student content unless that is verified; related general international-student videos may be placed in a separate supporting section.
 - `/edsembli-parent-portal.html` should embed the Edsembli video `eLHE7Np1Wks` inline on the page.
 - Use `youtube-nocookie.com` embed URLs and `loading="lazy"` for non-featured videos to reduce unnecessary loading while preserving inline playback.
