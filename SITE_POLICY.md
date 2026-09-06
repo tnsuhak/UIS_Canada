@@ -54,7 +54,8 @@
 - The student-story CTA wording is **`UIS 학생 후기 영상 모음`** and links to `/student-videos.html`.
 - `/student-videos.html` is intentionally narrow. Keep only the user-selected **1:1 student interview** and **university admission/scholarship outcome** videos; residence-only, general school-life, programme, event and other videos belong on `/videos.html`.
 - `/student-videos.html` must always place the **해대쉽 video first**. Current top video: `uOiiWw4qEIk`.
-- Current student-testimonial set and order to preserve unless the user changes it: `uOiiWw4qEIk` → `5pfXyfCMVP4` → `7WKfdB9_RQ8` → `oMdfbRgyFf8` → `XxVtMjgRL6M` → `BNChwQMLOxg` → `GOjFrOmtiyg`.
+- Current student-testimonial set and order to preserve unless the user changes it: `uOiiWw4qEIk` → `5pfXyfCMVP4` → `7WKfdB9_RQ8` → `oMdfbRgyFf8` → `XxVtMjgRL6M` → `uheYaM0pZ3k` → `GOjFrOmtiyg`.
+- For the Baek Songhyun University of Toronto scholarship testimonial, prefer the **Haedaeship/TNS upload** `uheYaM0pZ3k` rather than the UIS-channel copy.
 - `YAEim0A_xo8` belongs on `/videos.html`, not on `/student-videos.html`.
 - `/student-videos.html` should stay compact: no repeated section headings or introductory paragraphs between groups of videos. Each video card may keep a **short Korean title plus 1–2 lines of useful context** such as who the student is or notable university admission/scholarship results.
 - Translate user-visible English video titles into natural Korean. Keep official acronyms such as RVC only when useful, with the Korean institution name alongside them.
