@@ -54,10 +54,11 @@
 - The student-story CTA wording is **`UIS 학생 후기 영상 모음`** and links to `/student-videos.html`.
 - `/student-videos.html` is intentionally narrow. Keep only the user-selected **1:1 student interview** and **university admission/scholarship outcome** videos; residence-only, general school-life, programme, event and other videos belong on `/videos.html`.
 - `/student-videos.html` must always place the **해대쉽 video first**. Current top video: `uOiiWw4qEIk`.
-- Current student-testimonial set and order to preserve unless the user changes it: `uOiiWw4qEIk` → `5pfXyfCMVP4` → `XxVtMjgRL6M` → `BNChwQMLOxg`.
+- Current student-testimonial set and order to preserve unless the user changes it: `uOiiWw4qEIk` → `5pfXyfCMVP4` → `7WKfdB9_RQ8` → `oMdfbRgyFf8` → `XxVtMjgRL6M` → `BNChwQMLOxg` → `GOjFrOmtiyg`.
 - `YAEim0A_xo8` belongs on `/videos.html`, not on `/student-videos.html`.
 - `/student-videos.html` should stay compact: no repeated section headings or introductory paragraphs between groups of videos. Each video card may keep a **short Korean title plus 1–2 lines of useful context** such as who the student is or notable university admission/scholarship results.
 - Translate user-visible English video titles into natural Korean. Keep official acronyms such as RVC only when useful, with the Korean institution name alongside them.
+- For English-language YouTube embeds, request captions on and Korean as the preferred caption language with `cc_load_policy=1&cc_lang_pref=ko&hl=ko` when helpful. This only selects an available Korean caption track; it does **not** guarantee YouTube auto-translation into Korean when no Korean caption track exists.
 - `/edsembli-parent-portal.html` should embed the Edsembli video `eLHE7Np1Wks` inline on the page.
 - Use `youtube-nocookie.com` embed URLs and `loading="lazy"` for non-featured videos to reduce unnecessary loading while preserving inline playback.
 
