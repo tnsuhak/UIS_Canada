@@ -1,49 +1,33 @@
-export default async (request, context) => {
-  const response = await context.next();
-  const contentType = response.headers.get("content-type") || "";
-  if (!contentType.includes("text/html")) return response;
+export default async (request) => {
+  const url = new URL(request.url);
+  const isLunch = url.pathname.endsWith('/uis-qc-lunch-inspection-anonymized.webp');
+  const sourcePath = isLunch ? '/assets/qc/lunch-a.txt' : '/assets/qc/homestay-a.txt';
 
-  let html = await response.text();
+  const sourceUrl = new URL(sourcePath, request.url);
+  const source = await fetch(sourceUrl, { cache: 'no-store' });
+  if (!source.ok) {
+    return new Response('QC report image not found', { status: 404 });
+  }
 
-  const loader = `<script id="uis-qc-report-image-loader">
-(function(){
-  const reports = [
-    {match:'uis-qc-lunch-inspection-anonymized.webp', data:'/assets/qc/lunch-a.txt', mime:'image/avif'},
-    {match:'uis-qc-homestay-inspection-anonymized.webp', data:'/assets/qc/homestay-a.txt', mime:'image/avif'}
-  ];
-  async function loadReport(item){
-    const img = Array.from(document.querySelectorAll('.report-frame img')).find(el => (el.getAttribute('src') || '').includes(item.match));
-    if(!img) return;
-    try{
-      const res = await fetch(item.data, {cache:'no-store'});
-      if(!res.ok) throw new Error('image data '+res.status);
-      const b64 = (await res.text()).replace(/\s+/g,'');
-      if(!b64 || b64.length < 1000) throw new Error('image data incomplete');
-      const dataUrl = 'data:' + item.mime + ';base64,' + b64;
-      img.src = dataUrl;
-      img.removeAttribute('loading');
-      const link = img.closest('a');
-      if(link) link.href = dataUrl;
-    }catch(err){
-      console.error('UIS QC report image load failed', err);
+  const b64 = (await source.text()).replace(/\s+/g, '');
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+
+  return new Response(bytes, {
+    status: 200,
+    headers: {
+      'content-type': 'image/avif',
+      'cache-control': 'no-store, max-age=0'
     }
-  }
-  reports.forEach(loadReport);
-})();
-</script>`;
-
-  if (!html.includes('id="uis-qc-report-image-loader"')) {
-    html = html.replace('</body>', `${loader}</body>`);
-  }
-
-  const headers = new Headers(response.headers);
-  headers.delete("content-length");
-  headers.set("cache-control", "no-cache, no-store, must-revalidate");
-  return new Response(html, {
-    status: response.status,
-    statusText: response.statusText,
-    headers
   });
 };
 
-export const config = { path: "/accommodation-qc.html" };
+export const config = {
+  path: [
+    '/assets/uis-qc-lunch-inspection-anonymized.webp',
+    '/assets/uis-qc-homestay-inspection-anonymized.webp'
+  ]
+};
