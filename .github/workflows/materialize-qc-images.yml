@@ -1,0 +1,52 @@
+name: Materialize UIS QC report images
+
+on:
+  push:
+    branches:
+      - feature/remove-visa-finance-notice
+    paths:
+      - '.github/workflows/materialize-qc-images.yml'
+      - 'assets/qc/lunch-a.txt'
+      - 'assets/qc/homestay-a.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/remove-visa-finance-notice
+          fetch-depth: 0
+
+      - name: Decode report images to real WebP files
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 --decode assets/qc/lunch-a.txt > assets/qc-lunch-report-20260906.webp
+          base64 --decode assets/qc/homestay-a.txt > assets/qc-homestay-report-20260906.webp
+          file assets/qc-lunch-report-20260906.webp
+          file assets/qc-homestay-report-20260906.webp
+          test "$(head -c 4 assets/qc-lunch-report-20260906.webp)" = "RIFF"
+          test "$(dd if=assets/qc-lunch-report-20260906.webp bs=1 skip=8 count=4 status=none)" = "WEBP"
+          test "$(head -c 4 assets/qc-homestay-report-20260906.webp)" = "RIFF"
+          test "$(dd if=assets/qc-homestay-report-20260906.webp bs=1 skip=8 count=4 status=none)" = "WEBP"
+          wc -c assets/qc-lunch-report-20260906.webp assets/qc-homestay-report-20260906.webp
+
+      - name: Commit real binary image files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/qc-lunch-report-20260906.webp assets/qc-homestay-report-20260906.webp
+          if git diff --cached --quiet; then
+            echo "Binary QC images already materialized."
+            exit 0
+          fi
+          git commit -m "Materialize UIS QC report WebP assets"
+          git push origin HEAD:feature/remove-visa-finance-notice
