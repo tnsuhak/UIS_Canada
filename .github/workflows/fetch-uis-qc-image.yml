@@ -1,4 +1,4 @@
-name: Fetch clean UIS QC image
+name: Probe Canva UIS report view
 
 on:
   push:
@@ -6,39 +6,19 @@ on:
       - feature/qc-image-clean-rebuild
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  fetch-image:
-    if: github.actor != 'github-actions[bot]'
+  probe:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: feature/qc-image-clean-rebuild
-      - name: Download exact Canva-rendered report image
+      - name: Resolve Canva view URL
+        shell: bash
         run: |
-          mkdir -p assets
-          curl -L --fail --retry 3 --retry-delay 2 'https://s3.amazonaws.com/document-export.canva.com/air0s/DAHUgOair0s/1/thumbnail/0001.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH4GDRW44L%2F20260906%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260906T223411Z&X-Amz-Expires=40715&X-Amz-Signature=09ca058f3548dddae267945ae805a76d215e093762bbad984c9b8c5618be5ade&X-Amz-SignedHeaders=host&response-expires=Mon%2C%2007%20Sep%202026%2009%3A52%3A46%20GMT' -o assets/uis-homestay-pre-inspection-report-clean.png
-          python3 - <<'PY'
-          import os, struct
-          p='assets/uis-homestay-pre-inspection-report-clean.png'
-          with open(p,'rb') as f:
-              sig=f.read(24)
-          if sig[:8] != b'\x89PNG\r\n\x1a\n':
-              raise SystemExit('Downloaded file is not PNG')
-          w,h=struct.unpack('>II',sig[16:24])
-          size=os.path.getsize(p)
-          print(f'PNG {w}x{h}, {size} bytes')
-          if w < 1000 or h < 1300:
-              raise SystemExit(f'Image is too small: {w}x{h}')
-          if size < 100000:
-              raise SystemExit(f'Image file is suspiciously small: {size} bytes')
-          PY
-      - name: Commit verified image
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/uis-homestay-pre-inspection-report-clean.png
-          git commit -m 'Add verified high-resolution UIS QC report image [skip ci]'
-          git push origin HEAD:feature/qc-image-clean-rebuild
+          set -euo pipefail
+          echo '--- redirect headers ---'
+          curl -sSIL 'https://www.canva.com/d/ZjUgRqWvI0XZ8Uf' | sed -n '1,120p'
+          echo '--- effective URL ---'
+          curl -sSL -o /tmp/canva.html -w '%{url_effective}\n' 'https://www.canva.com/d/ZjUgRqWvI0XZ8Uf'
+          echo '--- page hints ---'
+          grep -Eo 'https://[^"'"'"' ]+|<link[^>]+>|<meta[^>]+' /tmp/canva.html | grep -Ei 'embed|canonical|og:image|design/DAHUgOair0s|media.canva' | head -80 || true
