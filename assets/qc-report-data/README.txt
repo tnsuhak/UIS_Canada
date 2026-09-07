@@ -1,0 +1,1 @@
+UIS homestay QC report image data rebuild. Exact source: 1086x1448 WebP, 280504 bytes, SHA-256 ee3067fcc2f0c770103eb5bf820ffdacacdd38f673949f812dd69d324b05b53c. Parts are base64 text joined client-side solely to work around binary-upload limitations in the connected GitHub interface.
