@@ -47,7 +47,7 @@ const CONTACT_MARKUP = `
       <div>
         <strong>부산 지사</strong>
         <span>부산 부산진구 중앙대로 694 쥬디스태화 9층 37호</span>
-        <span>010-5024-1733</span>
+        <span><a href="tel:010-5024-1733">010-5024-1733</a></span>
       </div>
     </div>
   </div>
