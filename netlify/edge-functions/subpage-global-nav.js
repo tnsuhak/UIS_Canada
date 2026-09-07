@@ -101,6 +101,7 @@ function isLegacySubpageBar(block){
 
 function removeLocalSubpageHeader(html){
   html = html.replace(/<header\b[^>]*>[\s\S]*?<\/header>/gi,function(block){return isLegacySubpageBar(block)?'':block;});
+  html = html.replace(/<nav\b[^>]*>[\s\S]*?<\/nav>/gi,function(block){return isLegacySubpageBar(block)?'':block;});
   html = html.replace(/<div\b[^>]*class=["'][^"']*\btop\b[^"']*["'][^>]*>[\s\S]*?<\/div>/gi,function(block){return isLegacySubpageBar(block)?'':block;});
   return html;
 }
