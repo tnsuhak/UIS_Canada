@@ -1,0 +1,29 @@
+name: UIS Predeploy Audit
+
+on:
+  push:
+    branches:
+      - feature/remove-visa-finance-notice
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  source-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit source SEO, sitemap, links and assets
+        run: python .github/scripts/predeploy_audit.py
+
+  live-preview-audit:
+    if: github.ref == 'refs/heads/feature/remove-visa-finance-notice'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for Netlify Deploy Preview
+        run: sleep 35
+      - name: Audit deployed preview routes
+        env:
+          LIVE_BASE: https://deploy-preview-2--uis-korea.netlify.app
+        run: python .github/scripts/predeploy_audit.py
