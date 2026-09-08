@@ -11,10 +11,22 @@ export default async (request, context) => {
     '<a href="/academics-calendar.html">학사 과정·2026–2028 학사 일정 자세히 보기</a>'
   );
 
-  // Add a clear CTA to the homepage academic section.
-  const academicsHead = '<span class="tag">학사 과정</span><h2>중등부 2년, 고등부 4년.<br>진로에 따라 여섯 갈래로 나뉩니다</h2></div>';
-  const academicsHeadLinked = '<span class="tag">학사 과정</span><h2>중등부 2년, 고등부 4년.<br>진로에 따라 여섯 갈래로 나뉩니다</h2><p style="margin:14px 0 0"><a href="/academics-calendar.html" style="color:#8E1B22;font-weight:800;text-decoration:none">학사 과정·2026–2028 학사 일정 자세히 보기 →</a></p></div>';
-  html = html.replace(academicsHead, academicsHeadLinked);
+  // Keep the academic-section heading clean and place the detail-page CTA at the section bottom,
+  // matching the homepage news/video CTA pattern.
+  html = html.replace(/<section class="sec" id="academics">[\s\S]*?<\/section>/, (section) => {
+    section = section.replace(
+      /<p[^>]*><a href="\/academics-calendar\.html"[^>]*>학사 과정·2026–2028 학사 일정 자세히 보기 →<\/a><\/p>/,
+      ""
+    );
+
+    if (!section.includes('uis-academics-actions')) {
+      section = section.replace(
+        /<\/div><\/section>$/,
+        '<p class="reveal uis-section-footer-actions uis-academics-actions" style="margin:24px 0 0"><a class="btn btn--line" href="/academics-calendar.html">학사 과정·학사 일정 자세히 보기 →</a></p></div></section>'
+      );
+    }
+    return section;
+  });
 
   // Align homepage wording with the latest UIS Korea 2026/27 and 2027/28 calendars.
   html = html.replaceAll('연 5회 입학, 5학기제 학사 일정', '정규학기 4회 + 여름학기 2개 세션');
