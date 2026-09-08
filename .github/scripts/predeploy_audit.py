@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """UIS Korea pre-deploy technical audit.
 
-Checks source HTML, sitemap/robots, internal routes/assets, metadata, JSON-LD,
-and optionally live preview URLs via LIVE_BASE.
+Checks source HTML, sitemap/robots, metadata, JSON-LD, internal links/assets,
+Edge Function-injected routes, deployed Preview responses and external links.
 """
 from __future__ import annotations
 
+import concurrent.futures
 import json
 import os
 import re
@@ -25,6 +26,7 @@ LIVE_BASE = os.environ.get("LIVE_BASE", "").rstrip("/")
 HARD = []
 WARN = []
 INFO = []
+EXTERNAL = set()
 
 
 def hard(msg): HARD.append(msg)
@@ -77,10 +79,13 @@ class PageParser(HTMLParser):
         if self._jsonld: self._jsonld_buf.append(data)
 
 
+def parse_text(text: str):
+    p = PageParser(); p.feed(text); return p
+
+
 def parse_page(path: Path):
     text = path.read_text(encoding="utf-8")
-    p = PageParser(); p.feed(text)
-    return text, p
+    return text, parse_text(text)
 
 
 def route_for(path: Path):
@@ -123,6 +128,33 @@ def is_local(ref: str):
     return u.scheme in ("http", "https") and u.netloc == "uis-korea.netlify.app"
 
 
+def add_external(ref: str):
+    u = urllib.parse.urlsplit(ref)
+    if u.scheme in ("http", "https") and u.netloc and u.netloc != "uis-korea.netlify.app":
+        # Fragments do not affect HTTP validity; deduplicate without fragment.
+        EXTERNAL.add(urllib.parse.urlunsplit((u.scheme, u.netloc, u.path, u.query, "")))
+
+
+def validate_page_parser(p: PageParser, label: str, expected_can: str):
+    title = "".join(p.title_parts).strip()
+    desc = get_meta(p, name="description")
+    robots = get_meta(p, name="robots").lower()
+    can = canonical(p)
+    if not title: hard(f"{label}: missing <title>")
+    elif not (18 <= len(title) <= 75): warn(f"{label}: title length {len(title)}")
+    if not desc: hard(f"{label}: missing meta description")
+    elif not (50 <= len(desc) <= 180): warn(f"{label}: meta description length {len(desc)}")
+    if p.h1 != 1: hard(f"{label}: H1 count is {p.h1}, expected 1")
+    if p.html_lang != "ko": warn(f"{label}: html lang is {p.html_lang!r}, expected 'ko'")
+    if "noindex" in robots: hard(f"{label}: page is noindex")
+    if can != expected_can: hard(f"{label}: canonical {can!r} != {expected_can!r}")
+    for i, block in enumerate(p.jsonld_blocks, 1):
+        if not block: hard(f"{label}: empty JSON-LD block #{i}")
+        else:
+            try: json.loads(block)
+            except Exception as e: hard(f"{label}: invalid JSON-LD #{i}: {e}")
+
+
 def audit_source():
     html_files = sorted(ROOT.glob("*.html")) + sorted(ROOT.glob("news/*.html")) + sorted(ROOT.glob("outcomes/*.html"))
     info(f"HTML pages checked: {len(html_files)}")
@@ -130,27 +162,11 @@ def audit_source():
     for f in html_files:
         text, p = parse_page(f); parsed_pages[f.resolve()] = p
         rel = f.relative_to(ROOT).as_posix()
-        title = "".join(p.title_parts).strip()
-        desc = get_meta(p, name="description")
-        robots = get_meta(p, name="robots").lower()
-        can = canonical(p)
-        if not title: hard(f"{rel}: missing <title>")
-        elif not (18 <= len(title) <= 75): warn(f"{rel}: title length {len(title)}")
-        if not desc: hard(f"{rel}: missing meta description")
-        elif not (50 <= len(desc) <= 180): warn(f"{rel}: meta description length {len(desc)}")
-        if p.h1 != 1: hard(f"{rel}: H1 count is {p.h1}, expected 1")
-        if p.html_lang != "ko": warn(f"{rel}: html lang is {p.html_lang!r}, expected 'ko'")
-        if "noindex" in robots: hard(f"{rel}: page is noindex")
-        expected_can = PROD + route_for(f)
-        if can != expected_can: hard(f"{rel}: canonical {can!r} != {expected_can!r}")
-        for i, block in enumerate(p.jsonld_blocks, 1):
-            if not block: hard(f"{rel}: empty JSON-LD block #{i}")
-            else:
-                try: json.loads(block)
-                except Exception as e: hard(f"{rel}: invalid JSON-LD #{i}: {e}")
+        validate_page_parser(p, rel, PROD + route_for(f))
         for img in p.images:
             if "alt" not in img: warn(f"{rel}: image missing alt ({img.get('src','')})")
         for href, attrs in p.hrefs:
+            add_external(href)
             if attrs.get("target") == "_blank" and "noopener" not in attrs.get("rel", "").split():
                 warn(f"{rel}: target=_blank without rel=noopener: {href}")
             if not is_local(href) or href.startswith("#"):
@@ -201,12 +217,13 @@ def audit_source():
     if "User-agent: *" not in txt or "Allow: /" not in txt: hard("robots.txt is not clearly crawlable")
     if f"Sitemap: {PROD}/sitemap.xml" not in txt: hard("robots.txt sitemap directive missing/wrong")
 
-    # Edge-function injected internal routes
+    # Edge-function injected internal/external routes
     edge_dir = ROOT / "netlify/edge-functions"
     link_re = re.compile(r'href=\\?["\']([^"\']+)')
     for js in sorted(edge_dir.glob("*.js")):
         text = js.read_text(encoding="utf-8")
         for href in link_re.findall(text):
+            add_external(href)
             if href.startswith(("/", PROD)):
                 u = urllib.parse.urlsplit(href if href.startswith("http") else PROD + href)
                 target, frag = file_for_url_path(u.path + (("#"+u.fragment) if u.fragment else ""))
@@ -217,18 +234,68 @@ def audit_source():
                         _, tp = parse_page(target); parsed_pages[target.resolve()] = tp
                     if frag not in tp.ids: hard(f"{js.relative_to(ROOT)}: injected fragment not found {href}")
 
+    # Search-engine verification markers are useful to know, but may be configured outside repo.
+    searchable = "\n".join(
+        p.read_text(encoding="utf-8", errors="ignore")
+        for p in list(ROOT.glob("*.html")) + list((ROOT / "netlify/edge-functions").glob("*.js"))
+    )
+    info("Google verification marker in repository: " + ("found" if "google-site-verification" in searchable else "not found"))
+    info("Naver verification marker in repository: " + ("found" if "naver-site-verification" in searchable else "not found"))
+    info(f"Unique external HTTP links discovered: {len(EXTERNAL)}")
 
-def fetch_url(url, attempts=3):
+
+def fetch_url(url, attempts=3, max_bytes=2_000_000):
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 TNS-Predeploy-Audit/1.0"})
     last = None
     for n in range(attempts):
         try:
             with urllib.request.urlopen(req, timeout=20) as r:
-                return r.status, r.headers.get("content-type", ""), r.read(2_000_000)
+                return r.status, r.headers.get("content-type", ""), r.read(max_bytes), r.geturl()
         except Exception as e:
             last = e
             if n + 1 < attempts: time.sleep(5)
     raise last
+
+
+def check_external(url):
+    req = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0 (compatible; TNS-Link-Audit/1.0)",
+            "Range": "bytes=0-2047",
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=12) as r:
+            r.read(2048)
+            return url, r.status, r.geturl(), None
+    except urllib.error.HTTPError as e:
+        return url, e.code, e.geturl(), None
+    except Exception as e:
+        return url, None, None, str(e)
+
+
+def audit_external_links():
+    if not LIVE_BASE:
+        info("External HTTP link check skipped outside live-preview job")
+        return
+    if not EXTERNAL:
+        return
+    ok = 0; unverifiable = 0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+        for url, status, final_url, err in ex.map(check_external, sorted(EXTERNAL)):
+            if err:
+                warn(f"EXTERNAL unverifiable: {url} ({err})"); unverifiable += 1
+            elif status in (404, 410):
+                hard(f"EXTERNAL broken HTTP {status}: {url}")
+            elif status is not None and 200 <= status < 400:
+                ok += 1
+            elif status in (401, 403, 405, 429):
+                # Many social/video platforms block automated audit clients.
+                warn(f"EXTERNAL bot-blocked/unverifiable HTTP {status}: {url}"); unverifiable += 1
+            else:
+                warn(f"EXTERNAL unexpected HTTP {status}: {url}"); unverifiable += 1
+    info(f"External links reachable: {ok}/{len(EXTERNAL)}; bot-blocked/unverifiable: {unverifiable}")
 
 
 def audit_live():
@@ -237,23 +304,36 @@ def audit_live():
         return
     sm_text = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
     locs = re.findall(r"<loc>" + re.escape(PROD) + r"([^<]*)</loc>", sm_text)
-    urls = [LIVE_BASE + (p or "/") for p in locs]
-    # robots/sitemap plus all indexable pages
+    page_paths = [p or "/" for p in locs]
+    urls = [LIVE_BASE + p for p in page_paths]
     urls += [LIVE_BASE + "/robots.txt", LIVE_BASE + "/sitemap.xml"]
     seen = set(); urls = [u for u in urls if not (u in seen or seen.add(u))]
     ok = 0
     for u in urls:
         try:
-            status, ctype, body = fetch_url(u)
+            status, ctype, body, final_url = fetch_url(u)
             if status != 200: hard(f"LIVE {u}: HTTP {status}")
             else: ok += 1
-            if u.endswith(".html") or u.rstrip("/") == LIVE_BASE:
+            path = urllib.parse.urlsplit(u).path or "/"
+            if path == "/" or path.endswith(".html"):
                 txt = body.decode("utf-8", "replace")
-                if "<title" not in txt.lower(): hard(f"LIVE {u}: missing title in served HTML")
-                if re.search(r'<meta[^>]+name=["\']robots["\'][^>]+noindex', txt, re.I): hard(f"LIVE {u}: served noindex")
+                p = parse_text(txt)
+                validate_page_parser(p, f"LIVE {path}", PROD + path)
+                # Served internal links should resolve to a known indexable page or same-page anchor.
+                for href, attrs in p.hrefs:
+                    add_external(href)
+                    if href.startswith("#"):
+                        if href[1:] and href[1:] not in p.ids: hard(f"LIVE {path}: missing same-page fragment {href}")
+                        continue
+                    if is_local(href):
+                        up = urllib.parse.urlsplit(href)
+                        target_path = up.path if up.netloc else urllib.parse.urljoin(path, up.path)
+                        target, frag = file_for_url_path(target_path + (("#" + up.fragment) if up.fragment else ""))
+                        if not target.exists(): hard(f"LIVE {path}: served broken internal link {href}")
         except Exception as e:
             hard(f"LIVE {u}: request failed: {e}")
     info(f"Live Preview URLs returning 200: {ok}/{len(urls)}")
+    audit_external_links()
 
 
 def main():
