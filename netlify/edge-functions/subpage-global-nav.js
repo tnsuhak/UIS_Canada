@@ -113,6 +113,7 @@ export default async (request, context) => {
 
   let html = await response.text();
   html = removeLocalSubpageHeader(html);
+  html = html.replace(/<p\b[^>]*class=["'][^"']*\bsource\b[^"']*["'][^>]*>[\s\S]*?UIS Korea가 2026년 9월 1일 전달한[\s\S]*?<\/p>/i,"");
 
   if (!html.includes("data-uis-global-nav")) {
     html = html.replace(/<\/head>/i,`${NAV_STYLE}</head>`);
@@ -129,6 +130,7 @@ export const config = {
   path: [
     "/accommodation-qc.html",
     "/accommodation.html",
+    "/academics-calendar.html",
     "/b2-boutique-program.html",
     "/clubs.html",
     "/edsembli-parent-portal.html",
