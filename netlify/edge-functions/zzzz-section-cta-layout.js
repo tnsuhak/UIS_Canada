@@ -38,6 +38,9 @@ export default async (request, context) => {
     return section;
   });
 
+  // 이전 우측 텍스트형 동아리 링크가 다른 변환 단계에서 남더라도 최종 출력에서는 제거.
+  html = html.replace(/<a\b[^>]*href=["']\/clubs\.html["'][^>]*>[\s\S]*?동아리 전체 보기[\s\S]*?<\/a>/gi, "");
+
   const headers = new Headers(response.headers);
   headers.delete("content-length");
   return new Response(html, { status: response.status, statusText: response.statusText, headers });
