@@ -27,6 +27,36 @@ jobs:
         env:
           LIVE_BASE: https://deploy-preview-2--uis-korea.netlify.app
         run: python .github/scripts/live_preview_audit.py
+      - name: Verify homepage CTA layout
+        env:
+          LIVE_BASE: https://deploy-preview-2--uis-korea.netlify.app
+        run: |
+          python - <<'PY'
+          import os, time, urllib.request
+          base=os.environ['LIVE_BASE'].rstrip('/')
+          last=None
+          for _ in range(4):
+              try:
+                  req=urllib.request.Request(base+'/',headers={'User-Agent':'Mozilla/5.0 TNS-Preview-Check/1.0'})
+                  with urllib.request.urlopen(req,timeout=20) as r:
+                      home=r.read(2_500_000).decode('utf-8','replace')
+                  break
+              except Exception as e:
+                  last=e; time.sleep(4)
+          else:
+              raise last
+          checks={
+              'outcomes footer CTA':'uis-section-footer-actions uis-outcomes-actions' in home,
+              'accommodation footer CTA':'uis-section-footer-actions uis-accommodation-actions' in home,
+              'clubs footer CTA':'uis-section-footer-actions uis-clubs-actions' in home,
+              'fees footer buttons':'class="btn btn--line" href="/tuition.html">2027 학비 자세히 보기 →</a><a class="btn btn--line" href="/accommodation.html">기숙사·홈스테이 자세히 보기 →</a>' in home,
+              'old fees inline links removed':'margin:12px 0 0;display:flex;flex-wrap:wrap;gap:14px' not in home,
+              'old clubs header link removed':'동아리 전체 보기 →' not in home,
+          }
+          failed=[k for k,v in checks.items() if not v]
+          for k,v in checks.items(): print(('PASS' if v else 'FAIL')+': '+k)
+          if failed: raise SystemExit('Homepage CTA layout checks failed: '+', '.join(failed))
+          PY
       - name: Verify academics guide integration
         env:
           LIVE_BASE: https://deploy-preview-2--uis-korea.netlify.app
