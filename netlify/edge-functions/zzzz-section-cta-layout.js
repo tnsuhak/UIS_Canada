@@ -38,8 +38,9 @@ export default async (request, context) => {
     return section;
   });
 
-  // 이전 우측 텍스트형 동아리 링크가 다른 변환 단계에서 남더라도 최종 출력에서는 제거.
-  html = html.replace(/<a\b[^>]*href=["']\/clubs\.html["'][^>]*>[\s\S]*?동아리 전체 보기[\s\S]*?<\/a>/gi, "");
+  // 이전 우측 텍스트 링크가 어떤 마크업 형태로 남아도 사용자 화면에서는 제거.
+  html = html.replace(/동아리 전체 보기\s*→/g, "");
+  html = html.replace(/<a\b[^>]*href=["']\/clubs\.html["'][^>]*>\s*<\/a>/gi, "");
 
   const headers = new Headers(response.headers);
   headers.delete("content-length");
