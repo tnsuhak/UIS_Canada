@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Audit the actual Netlify Deploy Preview as served to users/search bots."""
 from __future__ import annotations
-import concurrent.futures, json, os, re, sys, urllib.error, urllib.parse, urllib.request
+import concurrent.futures, json, os, re, sys, time, urllib.error, urllib.parse, urllib.request
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -46,12 +46,18 @@ def canonical(p):
         if "canonical" in str(a.get("rel","")).lower().split(): return a.get("href","").strip()
     return ""
 
-def get(url, limit=2_000_000):
-    req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0 (compatible; TNS-Predeploy-Audit/1.0)"})
-    try:
-        with urllib.request.urlopen(req,timeout=20) as r: return r.status,r.geturl(),r.headers.get("content-type",""),r.read(limit),None
-    except urllib.error.HTTPError as e: return e.code,e.geturl(),e.headers.get("content-type","") if e.headers else "",b"",None
-    except Exception as e: return None,None,"",b"",str(e)
+def get(url, limit=2_000_000, attempts=3):
+    last_error=None
+    for n in range(attempts):
+        req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0 (compatible; TNS-Predeploy-Audit/1.0)"})
+        try:
+            with urllib.request.urlopen(req,timeout=20) as r: return r.status,r.geturl(),r.headers.get("content-type",""),r.read(limit),None
+        except urllib.error.HTTPError as e:
+            return e.code,e.geturl(),e.headers.get("content-type","") if e.headers else "",b"",None
+        except Exception as e:
+            last_error=e
+            if n+1<attempts: time.sleep(2*(n+1))
+    return None,None,"",b"",str(last_error)
 
 def local(h):
     if h.startswith(("mailto:","tel:","javascript:","data:")):return False
@@ -108,7 +114,7 @@ def main():
         nofrag,frag=urllib.parse.urldefrag(x); st,final,ct,b,e=get(nofrag)
         return x,frag,st,ct,b,e
     int_ok=0
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
         for x,frag,st,ct,b,e in pool.map(check_internal,sorted(internal)):
             if e:err(f"Internal link failed: {x} ({e})")
             elif st is None or not 200<=st<400:err(f"Internal link HTTP {st}: {x}")
@@ -122,7 +128,7 @@ def main():
     def check_external(x):
         st,final,ct,b,e=get(x,4096); return x,st,e
     ext_ok=ext_un=0
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
         for x,st,e in pool.map(check_external,sorted(external)):
             if e:warn(f"External unverifiable: {x} ({e})"); ext_un+=1
             elif st in (404,410):err(f"External broken HTTP {st}: {x}")
