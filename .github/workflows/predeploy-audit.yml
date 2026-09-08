@@ -27,6 +27,39 @@ jobs:
         env:
           LIVE_BASE: https://deploy-preview-2--uis-korea.netlify.app
         run: python .github/scripts/live_preview_audit.py
+      - name: Verify academics guide integration
+        env:
+          LIVE_BASE: https://deploy-preview-2--uis-korea.netlify.app
+        run: |
+          python - <<'PY'
+          import os, time, urllib.request
+          base=os.environ['LIVE_BASE'].rstrip('/')
+          def read(path):
+              last=None
+              for _ in range(4):
+                  try:
+                      req=urllib.request.Request(base+path,headers={'User-Agent':'Mozilla/5.0 TNS-Preview-Check/1.0'})
+                      with urllib.request.urlopen(req,timeout=20) as r:
+                          return r.read(2_000_000).decode('utf-8','replace')
+                  except Exception as e:
+                      last=e; time.sleep(4)
+              raise last
+          home=read('/')
+          guide=read('/academics-calendar.html')
+          checks={
+              'homepage academic detail href':'href="/academics-calendar.html"' in home,
+              'homepage academic link label':'학사 과정·2026–2028 학사 일정 자세히 보기' in home,
+              'homepage updated semester wording':'정규학기 4회 + 여름학기 2개 세션' in home,
+              'old long menu paragraph removed':'Grade 7–12, OSSD, 학업 스트림과 연 5회 입학 일정을 메인에서 확인합니다.' not in home,
+              'guide h1 present':'UIS 학사 과정과' in guide,
+              '2026-27 schedule present':'2026.09.01 – 2026.11.06' in guide,
+              '2027-28 schedule present':'2027.11.11 – 2028.02.01' in guide,
+              'course duration present':'한 과목 10주 · 110시간' in guide,
+          }
+          failed=[k for k,v in checks.items() if not v]
+          for k,v in checks.items(): print(('PASS' if v else 'FAIL')+': '+k)
+          if failed: raise SystemExit('Academic integration checks failed: '+', '.join(failed))
+          PY
       - name: Audit canonical URL routing
         env:
           LIVE_BASE: https://deploy-preview-2--uis-korea.netlify.app
