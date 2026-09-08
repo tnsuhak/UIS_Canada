@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Wait for Netlify Deploy Preview
         run: sleep 35
-      - name: Audit deployed preview routes
+      - name: Audit actual deployed Preview HTML and links
         env:
           LIVE_BASE: https://deploy-preview-2--uis-korea.netlify.app
-        run: python .github/scripts/predeploy_audit.py
+        run: python .github/scripts/live_preview_audit.py
