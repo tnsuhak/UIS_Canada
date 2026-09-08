@@ -14,15 +14,23 @@ export default async (request, context) => {
     return section;
   });
 
-  // 2) 생활과 시설: 숙소 카드 내부 링크를 첫 카드 그리드 아래로 이동하고,
-  //    동아리 링크는 동아리 카드 전체 아래의 버튼으로 이동.
+  // 2) 생활과 시설: 카드 중간 텍스트 링크를 제거하고 각 묶음의 하단 버튼으로 이동.
   html = html.replace(/<section class="sec"><div class="wrap"><div class="sec__hd reveal"><span class="tag">생활과 시설<\/span>[\s\S]*?<\/section>/, (section) => {
-    section = section.replace(/<a href="\/accommodation\.html"[^>]*>기숙사·홈스테이 자세히 보기 →<\/a>/, "");
+    section = section.replace(/<a href="\/accommodation\.html"[^>]*>기숙사·홈스테이 자세히 보기 →<\/a>/g, "");
+    section = section.replace(/<a href="\/clubs\.html"[^>]*>동아리 전체 보기 →<\/a>/g, "");
 
-    section = section.replace(
-      /<div class="reveal" style="margin:clamp\(38px,5vw,52px\) 0 18px;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap"><h3 style="font-size:21px;margin:0">동아리와 학교 행사<\/h3><a href="\/clubs\.html"[^>]*>동아리 전체 보기 →<\/a><\/div>/,
-      '<p class="reveal uis-section-footer-actions uis-accommodation-actions" style="margin:24px 0 30px"><a class="btn btn--line" href="/accommodation.html">기숙사·홈스테이 자세히 보기 →</a></p><h3 class="reveal" style="margin:clamp(38px,5vw,52px) 0 18px;font-size:21px">동아리와 학교 행사</h3>'
-    );
+    if (!section.includes('class="uis-section-footer-actions uis-accommodation-actions"')) {
+      const titleIndex = section.indexOf('동아리와 학교 행사');
+      if (titleIndex !== -1) {
+        const divIndex = section.lastIndexOf('<div class="reveal"', titleIndex);
+        const h3Index = section.lastIndexOf('<h3 class="reveal"', titleIndex);
+        const insertAt = Math.max(divIndex, h3Index);
+        if (insertAt !== -1) {
+          const accommodationButton = '<p class="reveal uis-section-footer-actions uis-accommodation-actions" style="margin:24px 0 30px"><a class="btn btn--line" href="/accommodation.html">기숙사·홈스테이 자세히 보기 →</a></p>';
+          section = section.slice(0, insertAt) + accommodationButton + section.slice(insertAt);
+        }
+      }
+    }
 
     if (!section.includes('class="uis-section-footer-actions uis-clubs-actions"')) {
       section = section.replace(/<\/div><\/section>$/, '<p class="reveal uis-section-footer-actions uis-clubs-actions" style="margin:24px 0 0"><a class="btn btn--line" href="/clubs.html">동아리·학생 활동 자세히 보기 →</a></p></div></section>');
