@@ -27,3 +27,7 @@ jobs:
         env:
           LIVE_BASE: https://deploy-preview-2--uis-korea.netlify.app
         run: python .github/scripts/live_preview_audit.py
+      - name: Audit canonical URL routing
+        env:
+          LIVE_BASE: https://deploy-preview-2--uis-korea.netlify.app
+        run: python .github/scripts/url_shape_audit.py
