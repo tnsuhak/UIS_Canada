@@ -1,6 +1,6 @@
 """Publish only public assets; add server-side noindex headers on previews."""
 from pathlib import Path
-import shutil, os
+import shutil, os, re
 root=Path(__file__).resolve().parents[1];out=root/'dist'
 if out.exists():shutil.rmtree(out)
 out.mkdir()
@@ -8,6 +8,18 @@ for pattern in ['*.html','favicon.svg','robots.txt','sitemap.xml']:
  for p in root.glob(pattern):shutil.copy2(p,out/p.name)
 for folder in ['assets','news','outcomes']:
  shutil.copytree(root/folder,out/folder)
+
+# The TNS corporate-home card is homepage-only. Keep consultation channels on
+# detail pages, but remove this extra outbound card from every subpage.
+subpage_tns_home_card=re.compile(r'<a\b[^>]*class="[^"]*\buis-contact-card--home\b[^"]*"[^>]*>.*?</a>',re.S)
+for page in out.rglob('*.html'):
+ if page==out/'index.html':
+  continue
+ html=page.read_text()
+ cleaned=subpage_tns_home_card.sub('',html)
+ if cleaned!=html:
+  page.write_text(cleaned)
+
 if os.environ.get('CONTEXT')!='production':
  preview=os.environ.get('DEPLOY_PRIME_URL','').rstrip('/')
  if preview:
