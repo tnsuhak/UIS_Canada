@@ -28,22 +28,16 @@
 - Current 2026 B2 package figures remain CAD 63,000 with accommodation and CAD 51,000 without accommodation; later intakes must reconfirm current pricing.
 
 ## Homepage navigation / sitemap menu
-- The persistent homepage top navigation is for **same-page section jumps** only: 학교 소개, 진학 성과, 학사 과정, 특별 프로그램, 학생 관리, 학비·숙소, 입학 절차.
-- Do not place the primary consultation CTA in the top navigation; consultation remains in the body and bottom/floating CTA surfaces.
-- The right-side `전체 메뉴` is a **site-map style hierarchy**, not an unrelated re-categorization of pages.
-- Sitemap groups should mirror the homepage topics. Each group heading links back to the matching homepage section, and directly related detail pages are listed underneath.
-- Current mappings: 학교 소개 → 학생 이야기/동아리·학생 활동/UIS 학교 영상 모음/UIS 학생 후기 영상 모음; 진학 성과 → 2025/2026 결과; 특별 프로그램 → B2; 학생 관리 → 학부모 소통/Edsembli/숙소 QC; 학비·숙소 → 2027 학비/숙소 상세; 최신 소식 → 뉴스 아카이브.
-- Monthly news article links belong inside the news archive and should not be individually expanded in the global sitemap menu.
-- 학사 과정 and 입학 절차 currently have no dedicated detail page, so keep only the homepage section link rather than inventing a weakly related subpage.
-- As new detail pages are added, place them under the homepage topic they extend so the relationship remains obvious to users.
+- Homepage order: identity, four key facts, reasons for UIS, dated outcomes, six guides, parent care, housing/life, B2, TNS visit video, Korean interview, recent news, contact hub.
+- Main PC navigation: 학교소개 / 학사·OSSD / 진학성과 / 학생관리 / 학비·숙소 / 입학안내 / 전체보기.
+- PC links jump to the relevant homepage sections/guides; at 1160px and below show the compact logo + 전체보기 header.
+- All detail pages retain a single logo + 전체보기 header.
+- Shared menu source: components/navigation.html. Published page navigation is actual HTML, not runtime injection.
+- Admissions: /admissions.html. Academic/OSSD/calendar: /academics-calendar.html. Do not add a competing generic OSSD page.
 
 ## Homepage fee presentation
-- The homepage `학비·숙소` section should show the **2027 fee schedule only** while 2027 is the target intake year.
-- Do not restore a separate `2026년(현행)` tab or the `국가별 비교` tab unless the user explicitly requests them again.
-- Label the main tuition tab simply **`2027년`**, not `2027년 (12/1부터)`.
-- Keep a separate `숙소비` tab, but show the 2027 accommodation rates only rather than a 2026-vs-2027 comparison.
-- Older fee schedules may remain in repository history/source material for internal reference, but should not occupy homepage space.
-- The homepage fee section should link to `/tuition.html` for the detailed 2027 tuition guide and `/accommodation.html` for accommodation details.
+- Keep a short 2027 tuition guide card linking to /tuition.html. Full tuition and housing tables stay on /tuition.html and /accommodation.html.
+- Preserve labelled 2027 amounts from the current fee schedule; never replace them using an older brochure.
 
 ## 2027 tuition detail page
 - `/tuition.html` is the dedicated **2027 tuition and expected-payment guide**.
@@ -84,3 +78,14 @@
 - `UIS가 공개한`, `UIS 자료에 따르면`, `UIS가 말하기를`, `뉴스레터를 바탕으로 정리했다`처럼 제3자가 UIS를 설명하는 출처 귀속 문장은 피한다.
 - 사실은 본문에서 바로 설명하고, 일반 안내 페이지에는 출처 박스를 기본 노출하지 않는다. 뉴스 기사만 원문 출처를 유지한다.
 - 실제 학교 소유 공식 도메인으로 오해할 수 있는 `UIS 공식 한국 홈페이지` 표기는 사용하지 않고 `UIS 한국어 안내`를 사용한다.
+
+## UIS Korea scope and implementation (2026-09-14)
+- Online UHUB / online OSSD are outside this site. Do not expose them in page content, menus, metadata or SEO targeting. This does not prohibit describing the existing Edsembli parent portal or online parent-teacher meetings.
+- No runtime Edge Function rewriting of HTML. The September parent journey revision materializes the approved visible content into source HTML with shared CSS and JS.
+- Build: python3 scripts/build.py. Publish dist only. Preview/branch deployments receive noindex headers and disallow robots; production retains crawlable metadata and sitemap.
+- Keep the existing navy, burgundy, warm paper and gold visual language.
+- Local social card: assets/uis-social-card.png (1200×630). The existing PR #4 is expanded to include the revision; no production merge without user approval.
+- Favicon from PR #3 is incorporated; that independent PR can be closed as superseded after this change is published.
+- General detail pages have no visible source boxes. Internal verification goes in CONTENT_VERIFICATION.md; news original source links remain.
+- Community counts require dated verification before redisplay. Do not invent a count or verification date.
+- Optional analytics events carry only link category, page pathname and placement; they do not imply active GA/GTM collection.
