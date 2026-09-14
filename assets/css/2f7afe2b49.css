@@ -1,0 +1,4 @@
+
+  #care .card a[href^="/"]{font-size:13.5px!important;line-height:1.45!important}
+  @media(max-width:720px){#care .card a[href^="/"]{font-size:13px!important}}
+  

@@ -124,7 +124,8 @@ def validate_page(p, label, expected_canonical):
     elif not 50 <= len(desc) <= 180: warn(f"{label}: description length {len(desc)}")
     if p.h1 != 1: error(f"{label}: H1 count {p.h1}, expected 1")
     if p.lang != "ko": warn(f"{label}: html lang {p.lang!r}, expected ko")
-    if "noindex" in robots: error(f"{label}: noindex detected")
+    if "noindex" in robots and label != "404.html": error(f"{label}: noindex detected")
+    if label == "404.html" and "noindex" not in robots: error("404.html must be noindex")
     if can != expected_canonical: error(f"{label}: canonical {can!r} != {expected_canonical!r}")
     for i, block in enumerate(p.jsonlds, 1):
         try: json.loads(block)
@@ -174,7 +175,7 @@ def audit_source():
     except Exception as e:
         error(f"sitemap parse error: {e}"); locs = []
     if len(locs) != len(set(locs)): error("sitemap has duplicate URLs")
-    expected = {PROD + route(f) for f in pages}
+    expected = {PROD + route(f) for f in pages if f.name != "404.html"}
     for u in sorted(expected - set(locs)): error(f"HTML missing from sitemap: {u}")
     for u in sorted(set(locs) - expected): error(f"unexpected sitemap URL: {u}")
     for u in locs:

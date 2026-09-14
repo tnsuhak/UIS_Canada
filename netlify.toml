@@ -1,0 +1,12 @@
+[build]
+  command = "python3 scripts/build.py"
+  publish = "dist"
+
+[build.processing]
+  skip_processing = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
