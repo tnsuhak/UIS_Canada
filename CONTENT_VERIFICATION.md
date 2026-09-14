@@ -15,6 +15,7 @@
 - Academic dates: retained from academics-calendar.html; originating materials are UIS Korea's detailed 2026–2027 and 2027–2028 calendars received 2026-09-01 per source history. Rephrased introduction distinguishes middle-school and high-school calendars.
 - Outcome figures: carried over from existing 2025/2026 outcome guides. Main differentiates offer count (including multiple offers) from student count, labels each cohort, removes ambiguous top-five-university claim and unsupported increasing-scholarship headline.
 - Existing QC images, real report assets, student interview sequence, school visit video and news source links preserved.
+- Community social proof was user-confirmed on 2026-09-14 for display as conservative rounded thresholds: Naver Cafe `44,000명+ 참여중`, Canada open chat `1,200명+ 참여중`.
 
 ## Search intent mapping
 | URL | Primary Korean search intent |
@@ -35,7 +36,7 @@ Search service Korean query results on 2026-09-14 surfaced UIS pages focused on 
 - GSC Wizard list-sites call failed with payment_required (trial expired/no active subscription). Existing ownership cannot be inferred from absence of verification HTML/meta; DNS verification may exist.
 - No Naver Search Advisor management connector available. Ownership/submission status unknown.
 - No verified GA/GTM ID found. site.js prepares dataLayer events only; it does not install an analytics collector or transmit personal data.
-- Community counts removed from display because a reliable verification date is unavailable; no new count inferred.
+- Community counts should be refreshed when materially outdated; the displayed thresholds are user-confirmed as of 2026-09-14.
 - Search engine registrations and sitemap submissions should use production only after approval.
 - Shared local social card uses repository-owned text/vector layout; no remote image dependence or unsupported school ownership badge.
 
