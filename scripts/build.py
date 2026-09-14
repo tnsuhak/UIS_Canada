@@ -9,6 +9,10 @@ for pattern in ['*.html','favicon.svg','robots.txt','sitemap.xml']:
 for folder in ['assets','news','outcomes']:
  shutil.copytree(root/folder,out/folder)
 if os.environ.get('CONTEXT')!='production':
+ preview=os.environ.get('DEPLOY_PRIME_URL','').rstrip('/')
+ if preview:
+  for page in out.rglob('*.html'):
+   page.write_text(page.read_text().replace('https://uis-korea.netlify.app/assets/uis-social-card.png', preview+'/assets/uis-social-card.png'))
  (out/'_headers').write_text('/*\n  X-Robots-Tag: noindex, nofollow\n')
  (out/'robots.txt').write_text('User-agent: *\nDisallow: /\n')
 print('Built',len(list(out.rglob('*.html'))),'static pages; context:',os.environ.get('CONTEXT','local-preview'))
