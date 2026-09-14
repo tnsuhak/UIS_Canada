@@ -38,3 +38,11 @@ Search service Korean query results on 2026-09-14 surfaced UIS pages focused on 
 - Community counts removed from display because a reliable verification date is unavailable; no new count inferred.
 - Search engine registrations and sitemap submissions should use production only after approval.
 - Shared local social card uses repository-owned text/vector layout; no remote image dependence or unsupported school ownership badge.
+
+## Preview verification completed
+- Preview deployed successfully; no Edge Functions remain in deployed manifest.
+- Desktop and 390px/768px iframe viewports reviewed in the cloud browser. Mobile document width equals scroll width (375px usable within 390px viewport); full menu opened via pointer click.
+- Preview homepage and admissions guide return 200 with one H1 and preview-resolved OG image. Local social PNG returns 200, image/png, 1200×630.
+- Preview sends X-Robots-Tag noindex,nofollow; missing URL returns 404.
+- GitHub source audit passed for 24 public HTML files / 23 sitemap URLs.
+- Kakao chat delivery itself has not been tested; no message was sent. Production OG changes await production approval.
